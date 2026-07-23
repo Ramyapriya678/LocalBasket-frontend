@@ -1,98 +1,103 @@
-import axiosInstance from "../api/axiosConfig";
+import axios from "axios";
+
+const API_URL = "http://localhost:8080/api/deliveries";
 
 
-// Get delivery by order id (Customer tracking)
-export const getDeliveryByOrderId = (orderId) => {
+const getAuthHeaders = () => {
 
-    return axiosInstance.get(
-        `/deliveries/order/${orderId}`
-    );
+    const token = localStorage.getItem("token");
+
+    return {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    };
 
 };
 
 
+// Assign Delivery Partner
+export const assignDelivery = (data) => {
+    return axios.post(
+        `${API_URL}/assign`,
+        data,
+        getAuthHeaders()
+    );
+};
 
-// Get all deliveries (Admin)
+
+// Get all deliveries
 export const getAllDeliveries = () => {
-
-    return axiosInstance.get(
-        "/deliveries"
+    return axios.get(
+        `${API_URL}`,
+        getAuthHeaders()
     );
-
 };
 
 
+// Get delivery by ID
+export const getDeliveryById = (id) => {
+    return axios.get(
+        `${API_URL}/${id}`,
+        getAuthHeaders()
+    );
+};
 
-// Get deliveries by delivery partner
+
+// Get delivery by Order ID
+export const getDeliveryByOrderId = (orderId) => {
+    return axios.get(
+        `${API_URL}/order/${orderId}`,
+        getAuthHeaders()
+    );
+};
+
+
+// Get deliveries by Delivery Partner
 export const getDeliveriesByPartner = (deliveryPartnerId) => {
 
-    return axiosInstance.get(
-        `/deliveries/partner/${deliveryPartnerId}`
+    return axios.get(
+        `${API_URL}/partner/${deliveryPartnerId}`,
+        getAuthHeaders()
     );
 
 };
-
-
-
-// Assign delivery partner to order
-export const assignDelivery = (deliveryData) => {
-
-    return axiosInstance.post(
-        "/deliveries/assign",
-        deliveryData
-    );
-
-};
-
 
 
 // Update delivery status
-export const updateDeliveryStatus = (
-    deliveryId,
-    status
-) => {
+export const updateDeliveryStatus = (id, status) => {
 
-    return axiosInstance.put(
-        `/deliveries/${deliveryId}/status`,
-        null,
-        {
-            params: {
-                status
-            }
-        }
+    return axios.put(
+        `${API_URL}/${id}/status?status=${status}`,
+        {},
+        getAuthHeaders()
     );
 
 };
 
 
-
 // Update live location
-export const updateDeliveryLocation = (
-    deliveryId,
+export const updateLocation = (
+    id,
     latitude,
     longitude
 ) => {
 
-    return axiosInstance.put(
-        `/deliveries/${deliveryId}/location`,
-        null,
-        {
-            params: {
-                latitude,
-                longitude
-            }
-        }
+    return axios.put(
+        `${API_URL}/${id}/location?latitude=${latitude}&longitude=${longitude}`,
+        {},
+        getAuthHeaders()
     );
 
 };
 
 
-
 // Delete delivery
-export const deleteDelivery = (deliveryId) => {
+export const deleteDelivery = (id) => {
 
-    return axiosInstance.delete(
-        `/deliveries/${deliveryId}`
+    return axios.delete(
+        `${API_URL}/${id}`,
+        getAuthHeaders()
     );
 
 };

@@ -1,38 +1,40 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getStoreProducts } from "../services/storeService";
+
+import { getProductsByStore } from "../services/productService";
 import { addToCart } from "../services/cartService";
+
 
 function ProductList() {
 
     const { storeId } = useParams();
 
     const [products, setProducts] = useState([]);
-
-    // Get logged-in user id
-    const userId = localStorage.getItem("userId");
+    const [error, setError] = useState("");
 
 
     useEffect(() => {
-        fetchProducts();
-    }, []);
+
+        if (storeId) {
+            fetchProducts();
+        }
+
+    }, [storeId]);
 
 
     const fetchProducts = async () => {
 
         try {
 
-            const response = await getStoreProducts(storeId);
-
-            console.log(response.data);
+            const response = await getProductsByStore(storeId);
 
             setProducts(response.data);
 
         } catch (error) {
 
-            console.error(error);
+            console.error("Product Error:", error);
 
-            alert("Failed to load products.");
+            setError("Failed to load products");
 
         }
 
@@ -43,17 +45,30 @@ function ProductList() {
 
         try {
 
+            const userId = localStorage.getItem("userId");
+
+
+            if (!userId) {
+
+                alert("Please login first");
+                return;
+
+            }
+
+
             await addToCart(
                 userId,
                 storeProductId,
                 1
             );
 
+
             alert("Product added to cart");
+
 
         } catch (error) {
 
-            console.error(error);
+            console.error("Cart Error:", error);
 
             alert("Failed to add product to cart");
 
@@ -62,72 +77,94 @@ function ProductList() {
     };
 
 
+
     return (
 
         <div className="container mt-4">
 
-            <h2 className="mb-4">
-                Store Products
-            </h2>
+
+            <h2>Products</h2>
 
 
-            <div className="row">
+            {
+                error && (
 
-                {products.length > 0 ? (
+                    <p style={{color:"red"}}>
+                        {error}
+                    </p>
+
+                )
+            }
+
+
+
+            {
+                products.length > 0 ? (
 
                     products.map((item) => (
 
-                        <div 
-                            className="col-md-4 mb-4" 
+                        <div
+                            className="card mb-3"
                             key={item.id}
                         >
 
-                            <div className="card shadow h-100">
-
-                                <div className="card-body">
+                            <div className="card-body">
 
 
-                                    <h5 className="card-title">
-                                        {item.product.productName}
-                                    </h5>
+                                <h5>
+                                    {item.product?.productName}
+                                </h5>
 
 
-                                    <p>
-                                        <strong>Brand:</strong> {item.product.brand}
-                                    </p>
+                                <p>
+                                    Brand: {item.product?.brand}
+                                </p>
 
 
-                                    <p>
-                                        <strong>Unit:</strong> {item.product.unit}
-                                    </p>
+                                <p>
+                                    Description: {item.product?.description}
+                                </p>
 
 
-                                    <p>
-                                        <strong>Price:</strong> ₹{item.sellingPrice}
-                                    </p>
+                                <p>
+                                    Unit: {item.product?.unit}
+                                </p>
 
 
-                                    <p>
-                                        <strong>Discount:</strong> {item.discountPercentage}%
-                                    </p>
+                                <p>
+                                    Status: {item.product?.status}
+                                </p>
 
 
-                                    <p>
-                                        <strong>Stock:</strong> {item.stockQuantity}
-                                    </p>
+                                <p>
+                                    Price: ₹{item.sellingPrice}
+                                </p>
 
 
-                                    <button
-                                        className="btn btn-primary w-100"
-                                        onClick={() => handleAddToCart(item.id)}
-                                    >
-                                        Add to Cart
-                                    </button>
+                                <p>
+                                    Discount: {item.discountPercentage}%
+                                </p>
 
 
-                                </div>
+                                <p>
+                                    Stock: {item.stockQuantity}
+                                </p>
+
+
+
+                                <button
+                                    className="btn btn-success"
+                                    onClick={() => handleAddToCart(item.id)}
+                                >
+
+                                    Add to Cart
+
+                                </button>
+
+
 
                             </div>
+
 
                         </div>
 
@@ -135,16 +172,17 @@ function ProductList() {
 
                 ) : (
 
-                    <h5>No Products Available</h5>
+                    <p>No products available</p>
 
-                )}
+                )
+            }
 
-            </div>
 
         </div>
 
     );
 
 }
+
 
 export default ProductList;

@@ -5,224 +5,158 @@ import {
     updateDeliveryStatus
 } from "../services/deliveryService";
 
-
 function DeliveryDashboard() {
-
 
     const [deliveries, setDeliveries] = useState([]);
 
-
-    // Temporary delivery partner id
-    // Later we will get this from login
-    const deliveryPartnerId = 1;
-
-
+    // Get Delivery Partner ID from localStorage
+    const deliveryPartnerId = localStorage.getItem("deliveryPartnerId");
 
     useEffect(() => {
 
-        loadDeliveries();
+        if (deliveryPartnerId) {
+            loadDeliveries();
+        } else {
+            alert("Delivery Partner not logged in.");
+        }
 
     }, []);
-
-
-
 
     const loadDeliveries = async () => {
 
         try {
 
-            const response =
-                await getDeliveriesByPartner(
-                    deliveryPartnerId
-                );
+            const response = await getDeliveriesByPartner(deliveryPartnerId);
 
-
-            console.log(
-                "DELIVERIES RESPONSE:",
-                response.data
-            );
-
+            console.log("DELIVERIES RESPONSE:", response.data);
 
             setDeliveries(response.data);
 
-
-        } catch(error) {
+        } catch (error) {
 
             console.error(error);
-
-            alert(
-                "Failed to load deliveries"
-            );
+            alert("Failed to load deliveries.");
 
         }
 
     };
 
-
-
-
-
-    const changeStatus = async (
-        deliveryId,
-        status
-    ) => {
+    const changeStatus = async (deliveryId, status) => {
 
         try {
 
+            await updateDeliveryStatus(deliveryId, status);
 
-            await updateDeliveryStatus(
-                deliveryId,
-                status
-            );
-
-
-            alert(
-                "Status Updated"
-            );
-
+            alert("Delivery status updated successfully.");
 
             loadDeliveries();
 
-
-
-        } catch(error) {
+        } catch (error) {
 
             console.error(error);
-
-            alert(
-                "Failed to update status"
-            );
+            alert("Failed to update delivery status.");
 
         }
 
     };
 
-
-
-
-
     return (
-
 
         <div className="container mt-4">
 
-
-            <h2>
-                Delivery Dashboard
-            </h2>
-
-
-
+            <h2 className="mb-4">Delivery Dashboard</h2>
 
             {
-                deliveries.length > 0 ?
+                deliveries.length > 0 ? (
 
+                    deliveries.map((delivery) => (
 
-                deliveries.map((delivery)=>(
+                        <div
+                            className="card mb-3 shadow-sm"
+                            key={delivery.id}
+                        >
 
+                            <div className="card-body">
 
-                    <div
-                        className="card mb-3"
-                        key={delivery.id}
-                    >
+                                <h5 className="card-title">
+                                    Delivery ID: {delivery.id}
+                                </h5>
 
+                                <p>
+                                    <strong>Order ID:</strong> {delivery.orderId}
+                                </p>
 
-                        <div className="card-body">
+                                <p>
+                                    <strong>Status:</strong> {delivery.status}
+                                </p>
 
+                                {delivery.status === "ASSIGNED" && (
+                                    <button
+                                        className="btn btn-warning"
+                                        onClick={() =>
+                                            changeStatus(
+                                                delivery.id,
+                                                "PICKED_UP"
+                                            )
+                                        }
+                                    >
+                                        Pick Up
+                                    </button>
+                                )}
 
-                            <h5>
-                                Delivery ID:
-                                {delivery.id}
-                            </h5>
+                                {delivery.status === "PICKED_UP" && (
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={() =>
+                                            changeStatus(
+                                                delivery.id,
+                                                "OUT_FOR_DELIVERY"
+                                            )
+                                        }
+                                    >
+                                        Out For Delivery
+                                    </button>
+                                )}
 
+                                {delivery.status === "OUT_FOR_DELIVERY" && (
+                                    <button
+                                        className="btn btn-success"
+                                        onClick={() =>
+                                            changeStatus(
+                                                delivery.id,
+                                                "DELIVERED"
+                                            )
+                                        }
+                                    >
+                                        Delivered
+                                    </button>
+                                )}
 
+                                {delivery.status === "DELIVERED" && (
+                                    <span className="badge bg-success fs-6">
+                                        Delivered
+                                    </span>
+                                )}
 
-                            <p>
-                                Order ID:
-                                {delivery.orderId}
-                            </p>
-
-
-
-                            <p>
-                                Status:
-                                {delivery.status}
-                            </p>
-
-
-
-
-                            <button
-                                className="btn btn-warning me-2"
-                                onClick={() =>
-                                    changeStatus(
-                                        delivery.id,
-                                        "PICKED_UP"
-                                    )
-                                }
-                            >
-                                Pick Up
-                            </button>
-
-
-
-
-                            <button
-                                className="btn btn-primary me-2"
-                                onClick={() =>
-                                    changeStatus(
-                                        delivery.id,
-                                        "OUT_FOR_DELIVERY"
-                                    )
-                                }
-                            >
-                                Out For Delivery
-                            </button>
-
-
-
-
-                            <button
-                                className="btn btn-success"
-                                onClick={() =>
-                                    changeStatus(
-                                        delivery.id,
-                                        "DELIVERED"
-                                    )
-                                }
-                            >
-                                Delivered
-                            </button>
-
-
+                            </div>
 
                         </div>
 
+                    ))
 
+                ) : (
+
+                    <div className="alert alert-info">
+                        No deliveries assigned.
                     </div>
 
-
-                ))
-
-
-                :
-
-
-                <h4>
-                    No Deliveries Assigned
-                </h4>
-
-
+                )
             }
 
-
-
         </div>
-
 
     );
 
 }
-
 
 export default DeliveryDashboard;

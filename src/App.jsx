@@ -10,120 +10,292 @@ import ProductList from "./pages/ProductList";
 
 import Products from "./pages/Products";
 import Cart from "./pages/Cart";
-import Payments from "./pages/Payments";
+
 import Delivery from "./pages/Delivery";
 
 import MyOrders from "./pages/MyOrders";
 import OrderDetails from "./pages/OrderDetails";
+
 import DeliveryDashboard from "./pages/DeliveryDashboard";
 import Payment from "./pages/Payment";
+
+import CustomerDashboard from "./pages/CustomerDashboard";
+import Profile from "./pages/Profile";
+import Address from "./pages/Address";
+
+import ManageStores from "./pages/ManageStores";
+import ManageUsers from "./pages/ManageUsers";
+import AdminDashboard from "./pages/AdminDashboard";
+import ManageProducts from "./pages/ManageProducts";
+import ManageOrders from "./pages/ManageOrders";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+
+import StoreOwnerDashboard from "./pages/StoreOwnerDashboard";
+import MyStoreProducts from "./pages/MyStoreProducts";
+import AddStoreProduct from "./pages/AddStoreProduct";
+import StoreOrders from "./pages/StoreOrders";
+import AssignDelivery from "./pages/AssignDelivery";
+
 
 import NotFound from "./pages/NotFound";
 
 
 function App() {
 
-  return (
 
-    <BrowserRouter>
+    return (
 
-      <Routes>
-
-
-        {/* Home */}
-        <Route 
-          path="/" 
-          element={<Home />} 
-        />
+        <BrowserRouter>
 
 
-        {/* Authentication */}
-        <Route 
-          path="/login" 
-          element={<Login />} 
-        />
-
-        <Route 
-          path="/register" 
-          element={<Register />} 
-        />
+            <Routes>
 
 
-        {/* Dashboard */}
-        <Route 
-          path="/dashboard" 
-          element={<Dashboard />} 
-        />
+                {/* Home */}
 
-
-        {/* Store */}
-        <Route 
-          path="/stores" 
-          element={<StoreList />} 
-        />
-
-
-        <Route
-          path="/stores/:storeId/products"
-          element={<ProductList />}
-        />
+                <Route
+                    path="/"
+                    element={<Home />}
+                />
 
 
 
-        {/* Customer Pages */}
-        <Route 
-          path="/products" 
-          element={<Products />} 
-        />
+                {/* Authentication */}
+
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
 
 
-        <Route 
-          path="/cart" 
-          element={<Cart />} 
-        />
+                <Route
+                    path="/register"
+                    element={<Register />}
+                />
 
 
-        <Route 
-          path="/orders" 
-          element={<MyOrders />} 
-        />
+
+                {/* Dashboard */}
+
+                <Route
+                    path="/dashboard"
+                    element={<Dashboard />}
+                />
 
 
-        <Route 
-          path="/payments" 
-          element={<Payments />} 
-        />
+
+                {/* Stores */}
+
+                <Route
+                    path="/stores"
+                    element={<StoreList />}
+                />
 
 
-        <Route 
-          path="/delivery" 
-          element={<Delivery />} 
-        />
+                <Route
+                    path="/stores/:storeId/products"
+                    element={<ProductList />}
+                />
 
-        <Route
-    path="/orders/:id"
-    element={<OrderDetails />}
+
+
+                {/* Customer */}
+
+                <Route
+                    path="/products"
+                    element={<Products />}
+                />
+
+
+                <Route
+                    path="/cart"
+                    element={<Cart />}
+                />
+
+
+                <Route
+                    path="/orders"
+                    element={<MyOrders />}
+                />
+
+
+                <Route
+                    path="/orders/:id"
+                    element={<OrderDetails />}
+                />
+
+
+
+                {/* Payment */}
+
+                <Route
+                    path="/payment"
+                    element={<Payment />}
+                />
+
+
+
+                {/* Delivery */}
+
+                <Route
+                    path="/delivery"
+                    element={<Delivery />}
+                />
+
+
+                <Route
+                    path="/delivery-dashboard"
+                    element={
+                        <ProtectedRoute allowedRoles={["DELIVERY_PARTNER"]}>
+                            <DeliveryDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+
+                {/* Customer Dashboard */}
+
+                <Route
+                    path="/customer-dashboard"
+                    element={
+                        <ProtectedRoute allowedRoles={["CUSTOMER"]}>
+                            <CustomerDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+
+                {/* Profile */}
+
+                <Route
+                    path="/profile"
+                    element={<Profile />}
+                />
+
+
+                <Route
+                    path="/addresses"
+                    element={<Address />}
+                />
+
+
+
+                {/* Admin */}
+
+                <Route
+                    path="/admin-dashboard"
+                    element={
+                        <ProtectedRoute allowedRoles={["ADMIN"]}>
+                            <AdminDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                <Route
+                    path="/manage-users"
+                    element={
+                        <ProtectedRoute allowedRoles={["ADMIN"]}>
+                            <ManageUsers />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                <Route
+                    path="/manage-stores"
+                    element={
+                        <ProtectedRoute allowedRoles={["ADMIN"]}>
+                            <ManageStores />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                <Route
+                    path="/manage-products"
+                    element={<ManageProducts />}
+                />
+
+
+                <Route
+                    path="/manage-orders"
+                    element={
+                        <ProtectedRoute allowedRoles={["ADMIN"]}>
+                            <ManageOrders />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+
+                {/* Store Owner */}
+
+                <Route
+                    path="/store-owner-dashboard"
+                    element={
+                        <ProtectedRoute allowedRoles={["STORE_OWNER"]}>
+                            <StoreOwnerDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                <Route
+                    path="/add-store-product"
+                    element={
+                        <ProtectedRoute allowedRoles={["STORE_OWNER"]}>
+                            <AddStoreProduct />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                <Route
+                    path="/my-store-products"
+                    element={
+                        <ProtectedRoute allowedRoles={["STORE_OWNER"]}>
+                            <MyStoreProducts />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                <Route
+                    path="/store-orders"
+                    element={
+                        <ProtectedRoute allowedRoles={["STORE_OWNER"]}>
+                            <StoreOrders />
+                        </ProtectedRoute>
+                    }
+                />
+            <Route
+    path="/assign-delivery"
+    element={
+        <ProtectedRoute allowedRoles={["ADMIN"]}>
+            <AssignDelivery />
+        </ProtectedRoute>
+    }
 />
 
-        <Route
-    path="/delivery-dashboard"
-    element={<DeliveryDashboard />}
-/>
-        <Route path="/payment" element={<Payment />} />
 
-        {/* 404 */}
-        <Route 
-          path="*" 
-          element={<NotFound />} 
-        />
+                {/* 404 */}
+
+                <Route
+                    path="*"
+                    element={<NotFound />}
+                />
 
 
-      </Routes>
+            </Routes>
 
 
-    </BrowserRouter>
+        </BrowserRouter>
 
-  );
+    );
 
 }
 

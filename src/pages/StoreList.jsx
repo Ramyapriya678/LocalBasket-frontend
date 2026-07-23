@@ -81,14 +81,14 @@ function StoreList() {
                                         {store.status}
                                     </p>
 
-                                    <button
-                                        className="btn btn-success w-100"
-                                        onClick={() =>
-                                            navigate(`/stores/${store.id}/products`)
-                                        }
-                                    >
-                                        View Products
-                                    </button>
+                                   <button
+    className="btn btn-success w-100"
+    onClick={() =>
+        navigate(`/stores/${store.id}/products`)
+    }
+>
+    View Products
+</button>
 
                                 </div>
 

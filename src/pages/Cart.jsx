@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-
-import { placeOrder } from "../services/orderService";
+import { useNavigate } from "react-router-dom";
 
 import {
     getCart,
@@ -8,19 +7,30 @@ import {
     removeCartItem
 } from "../services/cartService";
 
+import { getUserAddresses } from "../services/addressService";
+
+import { placeOrder } from "../services/orderService";
+
 
 function Cart() {
+
+    const navigate = useNavigate();
+
+    const userId = localStorage.getItem("userId");
 
 
     const [cart, setCart] = useState(null);
 
-    const userId = localStorage.getItem("userId");
+    const [addresses, setAddresses] = useState([]);
+
+    const [selectedAddress, setSelectedAddress] = useState("");
 
 
 
     useEffect(() => {
 
         loadCart();
+        loadAddresses();
 
     }, []);
 
@@ -32,16 +42,11 @@ function Cart() {
 
             const response = await getCart(userId);
 
-            console.log(response.data);
-
             setCart(response.data);
 
-
         } catch(error) {
 
-            console.error(error);
-
-            alert("Failed to load cart");
+            console.log("Failed to load cart", error);
 
         }
 
@@ -49,20 +54,17 @@ function Cart() {
 
 
 
-    const increaseQuantity = async (item) => {
+    const loadAddresses = async () => {
 
         try {
 
-            await updateCartItem(
-                item.id,
-                item.quantity + 1
-            );
+            const response = await getUserAddresses(userId);
 
-            loadCart();
+            setAddresses(response.data);
 
         } catch(error) {
 
-            console.error(error);
+            console.log("Failed to load addresses", error);
 
         }
 
@@ -70,28 +72,26 @@ function Cart() {
 
 
 
-    const decreaseQuantity = async (item) => {
+    const changeQuantity = async(cartItemId, quantity) => {
 
 
-        if(item.quantity <= 1){
-
+        if(quantity < 1){
             return;
-
         }
 
 
         try {
 
             await updateCartItem(
-                item.id,
-                item.quantity - 1
+                cartItemId,
+                quantity
             );
 
             loadCart();
 
         } catch(error) {
 
-            console.error(error);
+            console.log(error);
 
         }
 
@@ -99,7 +99,7 @@ function Cart() {
 
 
 
-    const removeItem = async (cartItemId) => {
+    const removeItem = async(cartItemId) => {
 
 
         try {
@@ -110,7 +110,7 @@ function Cart() {
 
         } catch(error) {
 
-            console.error(error);
+            console.log(error);
 
         }
 
@@ -118,45 +118,44 @@ function Cart() {
 
 
 
-    const handleCheckout = async () => {
+    const checkout = async() => {
+
+
+        if(!selectedAddress){
+
+            alert("Please select delivery address");
+
+            return;
+
+        }
+
 
 
         try {
 
 
-            // Temporary address id
-            // Replace after address selection page
-            const addressId = 3;
-
-
             const response = await placeOrder(
                 userId,
-                addressId
+                selectedAddress
             );
 
 
-            console.log("ORDER RESPONSE:", response.data);
+            navigate("/payment", {
 
+                state:{
+                    order: response.data
+                }
 
-            alert("Order placed successfully");
-
-
-            // Refresh cart after order
-            loadCart();
-
+            });
 
 
         } catch(error) {
 
 
-            console.error(error);
-
-
-            if(error.response){
-
-                console.log(error.response.data);
-
-            }
+            console.log(
+                "Order failed",
+                error
+            );
 
 
             alert("Order failed");
@@ -164,24 +163,26 @@ function Cart() {
 
         }
 
-    };
 
+    };
 
 
 
     if(!cart){
 
-
         return (
 
-            <h3 className="container mt-4">
-                Loading Cart...
-            </h3>
+            <div className="container mt-4">
+
+                <h3>
+                    Loading Cart...
+                </h3>
+
+            </div>
 
         );
 
     }
-
 
 
 
@@ -196,68 +197,57 @@ function Cart() {
 
 
 
-
             {
-                cart.cartItems && cart.cartItems.length > 0 ?
+                cart.cartItems &&
+                cart.cartItems.length > 0 ?
 
 
                 cart.cartItems.map((item)=>(
 
 
                     <div
-                        className="card mb-3"
                         key={item.id}
+                        className="card p-3 mb-3"
                     >
 
 
-                        <div className="card-body">
+                        <h5>
 
+                            {
+                                item.storeProduct?.product?.productName
+                                ||
+                                item.storeProduct?.product?.name
+                                ||
+                                "Product"
+                            }
 
-                            <h5>
-                                {
-                                item.storeProduct.product.productName
-                                }
-                            </h5>
-
-
-
-                            <p>
-                                Price: ₹{item.price}
-                            </p>
+                        </h5>
 
 
 
-                            <p>
-                                Quantity: {item.quantity}
-                            </p>
+                        <p>
+                            Price: ₹{item.price}
+                        </p>
+
+
+                        <p>
+                            Subtotal: ₹{item.subtotal}
+                        </p>
 
 
 
-
-                            <button
-
-                                className="btn btn-success me-2"
-
-                                onClick={() =>
-                                    increaseQuantity(item)
-                                }
-
-                            >
-
-                                +
-
-                            </button>
-
-
-
+                        <div>
 
 
                             <button
 
-                                className="btn btn-warning me-2"
+                                className="btn btn-secondary"
 
                                 onClick={() =>
-                                    decreaseQuantity(item)
+                                    changeQuantity(
+                                        item.id,
+                                        item.quantity - 1
+                                    )
                                 }
 
                             >
@@ -268,25 +258,49 @@ function Cart() {
 
 
 
+                            <span className="mx-3">
+
+                                {item.quantity}
+
+                            </span>
+
 
 
                             <button
 
-                                className="btn btn-danger"
+                                className="btn btn-secondary"
 
                                 onClick={() =>
-                                    removeItem(item.id)
+                                    changeQuantity(
+                                        item.id,
+                                        item.quantity + 1
+                                    )
                                 }
 
                             >
 
-                                Remove
+                                +
 
                             </button>
 
 
-
                         </div>
+
+
+
+                        <button
+
+                            className="btn btn-danger mt-3"
+
+                            onClick={() =>
+                                removeItem(item.id)
+                            }
+
+                        >
+
+                            Remove
+
+                        </button>
 
 
                     </div>
@@ -297,52 +311,92 @@ function Cart() {
 
                 :
 
-
-                <h4>
+                <h5>
                     Cart is empty
-                </h4>
-
-
-            }
-
-
-
-
-            <hr/>
-
-
-
-
-            <h3>
-                Total Amount: ₹{cart.totalAmount}
-            </h3>
-
-
-
-
-            {
-                cart.cartItems && cart.cartItems.length > 0 &&
-
-                <button
-
-                    className="btn btn-primary mt-3"
-
-                    onClick={handleCheckout}
-
-                >
-
-                    Checkout
-
-                </button>
+                </h5>
 
             }
+
+
+
+
+
+            <hr />
+
+
+
+            <h4>
+                Select Delivery Address
+            </h4>
+
+
+
+            <select
+
+                className="form-select"
+
+                value={selectedAddress}
+
+                onChange={(e)=>
+                    setSelectedAddress(e.target.value)
+                }
+
+            >
+
+
+                <option value="">
+                    Select Address
+                </option>
+
+
+
+                {
+                    addresses.map((address)=>(
+
+
+                        <option
+
+                            key={address.id}
+
+                            value={address.id}
+
+                        >
+
+                            {address.addressLine1},
+                            {address.city},
+                            {address.state}
+                            -
+                            {address.pincode}
+
+
+                        </option>
+
+
+                    ))
+                }
+
+
+            </select>
+
+
+
+            <button
+
+                className="btn btn-success mt-4"
+
+                onClick={checkout}
+
+            >
+
+                Proceed To Checkout
+
+            </button>
 
 
 
         </div>
 
     );
-
 
 }
 

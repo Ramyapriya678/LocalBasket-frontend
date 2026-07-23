@@ -26,24 +26,57 @@ function Login() {
 
             const response = await loginUser(loginData);
 
-console.log("LOGIN RESPONSE:");
-console.log(JSON.stringify(response.data, null, 2));
+            console.log("LOGIN RESPONSE:");
+            console.log(JSON.stringify(response.data, null, 2));
 
-// Save JWT Token
-localStorage.setItem(
-    "token",
-    response.data.token
-);
+            // Save JWT Token
+            localStorage.setItem(
+                "token",
+                response.data.token
+            );
 
-        // Save User Id
-localStorage.setItem(
-    "userId",
-    response.data.userId
-);
+            // Save User Id
+            localStorage.setItem(
+                "userId",
+                response.data.userId
+            );
+
+            // Save Role
+            localStorage.setItem(
+                "role",
+                response.data.role
+            );
+// Save Store ID
+if (response.data.storeId) {
+    localStorage.setItem(
+        "storeId",
+        response.data.storeId
+    );
+}
+            // Save Delivery Partner ID
+if (response.data.deliveryPartnerId) {
+    localStorage.setItem(
+        "deliveryPartnerId",
+        response.data.deliveryPartnerId
+    );
+}
 
             alert("Login Successful");
 
-            navigate("/dashboard");
+            const role = response.data.role;
+
+            if (role === "ADMIN") {
+                navigate("/admin-dashboard");
+            }
+            else if (role === "STORE_OWNER") {
+                navigate("/store-owner-dashboard");
+            }
+            else if (role === "DELIVERY_PARTNER") {
+                navigate("/delivery-dashboard");
+            }
+            else {
+                navigate("/customer-dashboard");
+            }
 
         } catch (error) {
 
