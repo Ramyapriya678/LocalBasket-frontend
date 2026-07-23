@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { getProductsByStore } from "../services/productService";
 import { addToCart } from "../services/cartService";
 
+import "../styles/productList.css";
+
 
 function ProductList() {
 
@@ -13,26 +15,30 @@ function ProductList() {
     const [error, setError] = useState("");
 
 
+
     useEffect(() => {
 
-        if (storeId) {
+        if(storeId){
             fetchProducts();
         }
 
-    }, [storeId]);
+    },[storeId]);
 
 
-    const fetchProducts = async () => {
 
-        try {
+    const fetchProducts = async()=>{
 
-            const response = await getProductsByStore(storeId);
+        try{
+
+            const response =
+            await getProductsByStore(storeId);
 
             setProducts(response.data);
 
-        } catch (error) {
+        }
+        catch(error){
 
-            console.error("Product Error:", error);
+            console.error("Product Error:",error);
 
             setError("Failed to load products");
 
@@ -41,19 +47,26 @@ function ProductList() {
     };
 
 
-    const handleAddToCart = async (storeProductId) => {
-
-        try {
-
-            const userId = localStorage.getItem("userId");
 
 
-            if (!userId) {
+    const handleAddToCart = async(storeProductId)=>{
+
+
+        try{
+
+
+            const userId =
+            localStorage.getItem("userId");
+
+
+
+            if(!userId){
 
                 alert("Please login first");
                 return;
 
             }
+
 
 
             await addToCart(
@@ -66,121 +79,139 @@ function ProductList() {
             alert("Product added to cart");
 
 
-        } catch (error) {
+        }
+        catch(error){
 
-            console.error("Cart Error:", error);
+            console.error("Cart Error:",error);
 
             alert("Failed to add product to cart");
 
         }
 
+
     };
 
 
 
-    return (
-
-        <div className="container mt-4">
 
 
-            <h2>Products</h2>
+    return(
+
+
+        <div className="products-page">
+
+
+            <h2>
+                🥦 Available Products
+            </h2>
+
 
 
             {
-                error && (
-
-                    <p style={{color:"red"}}>
-                        {error}
-                    </p>
-
-                )
+                error &&
+                <p className="error">
+                    {error}
+                </p>
             }
 
 
 
+
+            <div className="product-grid">
+
+
             {
-                products.length > 0 ? (
+                products.length > 0 ?
 
-                    products.map((item) => (
 
-                        <div
-                            className="card mb-3"
-                            key={item.id}
+                products.map((item)=>(
+
+
+                    <div 
+                    className="product-card"
+                    key={item.id}
+                    >
+
+
+                        <h4>
+                            {item.product?.productName}
+                        </h4>
+
+
+
+                        <p>
+                            Brand:
+                            {item.product?.brand}
+                        </p>
+
+
+
+                        <p>
+                            {item.product?.description}
+                        </p>
+
+
+
+                        <p>
+                            Unit:
+                            {item.product?.unit}
+                        </p>
+
+
+
+                        <h3>
+                            ₹{item.sellingPrice}
+                        </h3>
+
+
+
+                        <p>
+                            Stock:
+                            {item.stockQuantity}
+                        </p>
+
+
+
+                        <button
+
+                        className="cart-btn"
+
+                        onClick={()=>
+                            handleAddToCart(item.id)
+                        }
+
                         >
 
-                            <div className="card-body">
+                            🛒 Add To Cart
 
-
-                                <h5>
-                                    {item.product?.productName}
-                                </h5>
-
-
-                                <p>
-                                    Brand: {item.product?.brand}
-                                </p>
-
-
-                                <p>
-                                    Description: {item.product?.description}
-                                </p>
-
-
-                                <p>
-                                    Unit: {item.product?.unit}
-                                </p>
-
-
-                                <p>
-                                    Status: {item.product?.status}
-                                </p>
-
-
-                                <p>
-                                    Price: ₹{item.sellingPrice}
-                                </p>
-
-
-                                <p>
-                                    Discount: {item.discountPercentage}%
-                                </p>
-
-
-                                <p>
-                                    Stock: {item.stockQuantity}
-                                </p>
+                        </button>
 
 
 
-                                <button
-                                    className="btn btn-success"
-                                    onClick={() => handleAddToCart(item.id)}
-                                >
-
-                                    Add to Cart
-
-                                </button>
+                    </div>
 
 
+                ))
 
-                            </div>
+
+                :
+
+                <p>
+                    No products available
+                </p>
 
 
-                        </div>
-
-                    ))
-
-                ) : (
-
-                    <p>No products available</p>
-
-                )
             }
+
+
+            </div>
 
 
         </div>
 
+
     );
+
 
 }
 

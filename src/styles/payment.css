@@ -1,0 +1,55 @@
+.payment-page{
+    background:#f6faf7;
+    min-height:100vh;
+    padding:40px;
+}
+
+.payment-card{
+    background:#fff;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(0,0,0,.1);
+}
+
+.payment-header{
+    background:#1faa59;
+    color:white;
+    padding:20px;
+}
+
+.payment-body{
+    padding:30px;
+}
+
+.payment-select{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
+
+.pay-btn{
+    width:100%;
+    margin-top:20px;
+    background:#1faa59;
+    color:white;
+    border:none;
+    padding:12px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+}
+
+.pay-btn:hover{
+    background:#16884a;
+}
+
+.cancel-btn{
+    width:100%;
+    margin-top:10px;
+    background:#6c757d;
+    color:white;
+    border:none;
+    padding:12px;
+    border-radius:10px;
+}

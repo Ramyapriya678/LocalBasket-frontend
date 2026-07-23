@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../styles/address.css";
 
 import {
     addAddress,
@@ -133,7 +134,7 @@ function Address() {
 
     return (
 
-        <div className="container mt-5">
+        <div className="container mt-5 address-page">
 
 
             <h2 className="mb-4">
@@ -142,7 +143,7 @@ function Address() {
 
 
 
-            <div className="card shadow p-4 mb-5">
+            <div className="card shadow p-4 mb-5 address-form-card">
 
 
                 <h4 className="mb-4">
@@ -203,7 +204,7 @@ function Address() {
 
                 <button
 
-                    className="btn btn-primary mt-3"
+                    className="btn btn-success mt-3 save-address-btn"
 
                     onClick={saveAddress}
 
@@ -256,7 +257,7 @@ function Address() {
                         >
 
 
-                            <div className="card shadow h-100">
+                            <div className="card shadow h-100 saved-address-card">
 
 
                                 <div className="card-body">
@@ -301,8 +302,7 @@ function Address() {
 
                                     <button
 
-                                        className="btn btn-danger"
-
+                                        className="btn btn-danger delete-address-btn"
                                         onClick={()=>
                                             removeAddress(item.id)
                                         }

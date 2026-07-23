@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { createPayment } from "../services/paymentService";
+import "../styles/payment.css";
 
 function Payment() {
 
@@ -53,10 +54,19 @@ function Payment() {
 
         return (
 
-            <div className="container mt-4">
+            <div className="payment-page">
 
-                <div className="alert alert-danger">
-                    No Order Found
+                <div className="error-card">
+
+                    <h3>No Order Found</h3>
+
+                    <button
+                        className="cancel-btn"
+                        onClick={() => navigate(-1)}
+                    >
+                        Go Back
+                    </button>
+
                 </div>
 
             </div>
@@ -67,91 +77,83 @@ function Payment() {
 
     return (
 
-        <div className="container mt-5">
+        <div className="payment-page">
 
-            <div className="row justify-content-center">
+            <div className="payment-card">
 
-                <div className="col-md-6">
+                <div className="payment-header">
 
-                    <div className="card shadow">
+                    <h2>💳 Payment Gateway</h2>
 
-                        <div className="card-header bg-primary text-white">
+                </div>
 
-                            <h3 className="mb-0">
-                                Payment Gateway
-                            </h3>
+                <div className="payment-body">
 
-                        </div>
+                    <div className="order-summary">
 
-                        <div className="card-body">
+                        <h4>Order Summary</h4>
 
-                            <h5>
-                                Order ID : {order.id}
-                            </h5>
+                        <p>
+                            <strong>Order ID:</strong> {order.id}
+                        </p>
 
-                            <h4 className="text-success mb-4">
-                                Amount : ₹{order.totalAmount}
-                            </h4>
-
-                            <div className="mb-3">
-
-                                <label className="form-label">
-                                    Select Payment Method
-                                </label>
-
-                                <select
-                                    className="form-select"
-                                    value={paymentMethod}
-                                    onChange={(e) =>
-                                        setPaymentMethod(e.target.value)
-                                    }
-                                >
-
-                                    <option value="COD">
-                                        Cash On Delivery
-                                    </option>
-
-                                    <option value="UPI">
-                                        UPI
-                                    </option>
-
-                                    <option value="DEBIT_CARD">
-                                        Debit Card
-                                    </option>
-
-                                    <option value="CREDIT_CARD">
-                                        Credit Card
-                                    </option>
-
-                                    <option value="NET_BANKING">
-                                        Net Banking
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-                            <div className="d-grid gap-2">
-
-                                <button
-                                    className="btn btn-success"
-                                    onClick={handlePayment}
-                                >
-                                    Pay ₹{order.totalAmount}
-                                </button>
-
-                                <button
-                                    className="btn btn-secondary"
-                                    onClick={() => navigate(-1)}
-                                >
-                                    Cancel
-                                </button>
-
-                            </div>
-
-                        </div>
+                        <p className="amount">
+                            ₹{order.totalAmount}
+                        </p>
 
                     </div>
+
+                    <div className="payment-method">
+
+                        <label>
+                            Select Payment Method
+                        </label>
+
+                        <select
+                            className="payment-select"
+                            value={paymentMethod}
+                            onChange={(e) =>
+                                setPaymentMethod(e.target.value)
+                            }
+                        >
+
+                            <option value="COD">
+                                Cash On Delivery
+                            </option>
+
+                            <option value="UPI">
+                                UPI
+                            </option>
+
+                            <option value="DEBIT_CARD">
+                                Debit Card
+                            </option>
+
+                            <option value="CREDIT_CARD">
+                                Credit Card
+                            </option>
+
+                            <option value="NET_BANKING">
+                                Net Banking
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <button
+                        className="pay-btn"
+                        onClick={handlePayment}
+                    >
+                        Pay ₹{order.totalAmount}
+                    </button>
+
+                    <button
+                        className="cancel-btn"
+                        onClick={() => navigate(-1)}
+                    >
+                        Cancel
+                    </button>
 
                 </div>
 

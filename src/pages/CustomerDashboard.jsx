@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import "../styles/customerDashboard.css";
 
 
 function CustomerDashboard() {
@@ -10,11 +11,11 @@ function CustomerDashboard() {
 
     return (
 
-        <div className="container mt-5">
+        <div className="customer-dashboard">
 
 
             <h1 className="mb-5">
-                Welcome to LocalBasket
+                Welcome to LocalBasket 🛒
             </h1>
 
 
@@ -26,11 +27,13 @@ function CustomerDashboard() {
 
                 <div className="col-md-6 mb-4">
 
-                    <div className="card shadow text-center p-4">
+                    <div className="dashboard-card">
+
 
                         <h2>
                             🛍️ Stores
                         </h2>
+
 
                         <p>
                             Browse nearby stores
@@ -65,7 +68,7 @@ function CustomerDashboard() {
                 <div className="col-md-6 mb-4">
 
 
-                    <div className="card shadow text-center p-4">
+                    <div className="dashboard-card">
 
 
                         <h2>
@@ -107,7 +110,7 @@ function CustomerDashboard() {
                 <div className="col-md-6 mb-4">
 
 
-                    <div className="card shadow text-center p-4">
+                    <div className="dashboard-card">
 
 
                         <h2>
@@ -149,7 +152,7 @@ function CustomerDashboard() {
                 <div className="col-md-6 mb-4">
 
 
-                    <div className="card shadow text-center p-4">
+                    <div className="dashboard-card">
 
 
                         <h2>
@@ -185,12 +188,13 @@ function CustomerDashboard() {
 
 
 
+
                 {/* Profile */}
 
                 <div className="col-md-6 mb-4">
 
 
-                    <div className="card shadow text-center p-4">
+                    <div className="dashboard-card">
 
 
                         <h2>
@@ -225,12 +229,14 @@ function CustomerDashboard() {
 
 
 
+
+
                 {/* Address */}
 
                 <div className="col-md-6 mb-4">
 
 
-                    <div className="card shadow text-center p-4">
+                    <div className="dashboard-card">
 
 
                         <h2>

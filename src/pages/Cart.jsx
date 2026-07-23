@@ -8,9 +8,9 @@ import {
 } from "../services/cartService";
 
 import { getUserAddresses } from "../services/addressService";
-
 import { placeOrder } from "../services/orderService";
 
+import "../styles/cart.css";
 
 function Cart() {
 
@@ -18,14 +18,9 @@ function Cart() {
 
     const userId = localStorage.getItem("userId");
 
-
     const [cart, setCart] = useState(null);
-
     const [addresses, setAddresses] = useState([]);
-
     const [selectedAddress, setSelectedAddress] = useState("");
-
-
 
     useEffect(() => {
 
@@ -34,17 +29,14 @@ function Cart() {
 
     }, []);
 
-
-
     const loadCart = async () => {
 
         try {
 
             const response = await getCart(userId);
-
             setCart(response.data);
 
-        } catch(error) {
+        } catch (error) {
 
             console.log("Failed to load cart", error);
 
@@ -52,17 +44,14 @@ function Cart() {
 
     };
 
-
-
     const loadAddresses = async () => {
 
         try {
 
             const response = await getUserAddresses(userId);
-
             setAddresses(response.data);
 
-        } catch(error) {
+        } catch (error) {
 
             console.log("Failed to load addresses", error);
 
@@ -70,26 +59,17 @@ function Cart() {
 
     };
 
+    const changeQuantity = async (cartItemId, quantity) => {
 
-
-    const changeQuantity = async(cartItemId, quantity) => {
-
-
-        if(quantity < 1){
-            return;
-        }
-
+        if (quantity < 1) return;
 
         try {
 
-            await updateCartItem(
-                cartItemId,
-                quantity
-            );
+            await updateCartItem(cartItemId, quantity);
 
             loadCart();
 
-        } catch(error) {
+        } catch (error) {
 
             console.log(error);
 
@@ -97,10 +77,7 @@ function Cart() {
 
     };
 
-
-
-    const removeItem = async(cartItemId) => {
-
+    const removeItem = async (cartItemId) => {
 
         try {
 
@@ -108,7 +85,7 @@ function Cart() {
 
             loadCart();
 
-        } catch(error) {
+        } catch (error) {
 
             console.log(error);
 
@@ -116,67 +93,45 @@ function Cart() {
 
     };
 
+    const checkout = async () => {
 
-
-    const checkout = async() => {
-
-
-        if(!selectedAddress){
+        if (!selectedAddress) {
 
             alert("Please select delivery address");
-
             return;
 
         }
 
-
-
         try {
-
 
             const response = await placeOrder(
                 userId,
                 selectedAddress
             );
 
-
             navigate("/payment", {
-
-                state:{
+                state: {
                     order: response.data
                 }
-
             });
 
+        } catch (error) {
 
-        } catch(error) {
-
-
-            console.log(
-                "Order failed",
-                error
-            );
-
+            console.log("Order failed", error);
 
             alert("Order failed");
 
-
         }
-
 
     };
 
-
-
-    if(!cart){
+    if (!cart) {
 
         return (
 
-            <div className="container mt-4">
+            <div className="cart-page">
 
-                <h3>
-                    Loading Cart...
-                </h3>
+                <h3>Loading Cart...</h3>
 
             </div>
 
@@ -184,221 +139,153 @@ function Cart() {
 
     }
 
-
-
     return (
 
-        <div className="container mt-4">
+        <div className="cart-page">
 
-
-            <h2>
-                My Cart
-            </h2>
-
-
+            <h2>🛒 My Cart</h2>
 
             {
                 cart.cartItems &&
                 cart.cartItems.length > 0 ?
 
+                    cart.cartItems.map((item) => (
 
-                cart.cartItems.map((item)=>(
+                        <div
+                            key={item.id}
+                            className="cart-card"
+                        >
 
+                            <h4>
+                                {
+                                    item.storeProduct?.product?.productName ||
+                                    item.storeProduct?.product?.name ||
+                                    "Product"
+                                }
+                            </h4>
 
-                    <div
-                        key={item.id}
-                        className="card p-3 mb-3"
-                    >
+                            <p>
+                                <strong>Price:</strong> ₹{item.price}
+                            </p>
 
+                            <p>
+                                <strong>Subtotal:</strong> ₹{item.subtotal}
+                            </p>
 
-                        <h5>
+                            <div className="quantity-controls">
 
-                            {
-                                item.storeProduct?.product?.productName
-                                ||
-                                item.storeProduct?.product?.name
-                                ||
-                                "Product"
-                            }
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={() =>
+                                        changeQuantity(
+                                            item.id,
+                                            item.quantity - 1
+                                        )
+                                    }
+                                >
+                                    -
+                                </button>
 
-                        </h5>
+                                <span className="quantity">
+                                    {item.quantity}
+                                </span>
 
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={() =>
+                                        changeQuantity(
+                                            item.id,
+                                            item.quantity + 1
+                                        )
+                                    }
+                                >
+                                    +
+                                </button>
 
-
-                        <p>
-                            Price: ₹{item.price}
-                        </p>
-
-
-                        <p>
-                            Subtotal: ₹{item.subtotal}
-                        </p>
-
-
-
-                        <div>
-
+                            </div>
 
                             <button
-
-                                className="btn btn-secondary"
-
+                                className="btn btn-danger mt-3"
                                 onClick={() =>
-                                    changeQuantity(
-                                        item.id,
-                                        item.quantity - 1
-                                    )
+                                    removeItem(item.id)
                                 }
-
                             >
-
-                                -
-
+                                Remove
                             </button>
-
-
-
-                            <span className="mx-3">
-
-                                {item.quantity}
-
-                            </span>
-
-
-
-                            <button
-
-                                className="btn btn-secondary"
-
-                                onClick={() =>
-                                    changeQuantity(
-                                        item.id,
-                                        item.quantity + 1
-                                    )
-                                }
-
-                            >
-
-                                +
-
-                            </button>
-
 
                         </div>
 
+                    ))
 
+                    :
 
-                        <button
+                    <div className="empty-cart">
 
-                            className="btn btn-danger mt-3"
+                        <h4>🛒 Cart is Empty</h4>
 
-                            onClick={() =>
-                                removeItem(item.id)
-                            }
-
-                        >
-
-                            Remove
-
-                        </button>
-
+                        <p>
+                            Add some products to continue shopping.
+                        </p>
 
                     </div>
 
-
-                ))
-
-
-                :
-
-                <h5>
-                    Cart is empty
-                </h5>
-
             }
-
-
-
-
 
             <hr />
 
+            <div className="checkout-section">
 
+                <h4>Select Delivery Address</h4>
 
-            <h4>
-                Select Delivery Address
-            </h4>
+                <select
 
+                    className="address-select"
 
+                    value={selectedAddress}
 
-            <select
+                    onChange={(e) =>
+                        setSelectedAddress(e.target.value)
+                    }
 
-                className="form-select"
+                >
 
-                value={selectedAddress}
+                    <option value="">
+                        Select Address
+                    </option>
 
-                onChange={(e)=>
-                    setSelectedAddress(e.target.value)
-                }
+                    {
+                        addresses.map((address) => (
 
-            >
+                            <option
+                                key={address.id}
+                                value={address.id}
+                            >
 
+                                {address.addressLine1},{" "}
+                                {address.city},{" "}
+                                {address.state} -{" "}
+                                {address.pincode}
 
-                <option value="">
-                    Select Address
-                </option>
+                            </option>
 
+                        ))
+                    }
 
+                </select>
 
-                {
-                    addresses.map((address)=>(
+                <button
+                    className="checkout-btn"
+                    onClick={checkout}
+                >
+                    Proceed To Checkout
+                </button>
 
-
-                        <option
-
-                            key={address.id}
-
-                            value={address.id}
-
-                        >
-
-                            {address.addressLine1},
-                            {address.city},
-                            {address.state}
-                            -
-                            {address.pincode}
-
-
-                        </option>
-
-
-                    ))
-                }
-
-
-            </select>
-
-
-
-            <button
-
-                className="btn btn-success mt-4"
-
-                onClick={checkout}
-
-            >
-
-                Proceed To Checkout
-
-            </button>
-
-
+            </div>
 
         </div>
 
     );
 
 }
-
 
 export default Cart;

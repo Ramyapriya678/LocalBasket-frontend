@@ -36,7 +36,8 @@ import MyStoreProducts from "./pages/MyStoreProducts";
 import AddStoreProduct from "./pages/AddStoreProduct";
 import StoreOrders from "./pages/StoreOrders";
 import AssignDelivery from "./pages/AssignDelivery";
-
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 import NotFound from "./pages/NotFound";
 
@@ -48,6 +49,9 @@ function App() {
 
         <BrowserRouter>
 
+            <Navbar />
+
+            <div style={{ minHeight: "80vh" }}>
 
             <Routes>
 
@@ -292,6 +296,9 @@ function App() {
 
             </Routes>
 
+            </div>
+
+            <Footer />
 
         </BrowserRouter>
 

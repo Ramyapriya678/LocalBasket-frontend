@@ -1,0 +1,106 @@
+.customer-dashboard {
+
+    padding: 40px;
+    background: #f6faf7;
+    min-height: 100vh;
+
+}
+
+
+
+.customer-dashboard h1 {
+
+    color: #1faa59;
+    font-weight: 700;
+    text-align: center;
+
+}
+
+
+
+/* Card Layout */
+
+.row {
+
+    display: flex;
+    flex-wrap: wrap;
+
+}
+
+
+
+/* Dashboard Cards */
+
+.dashboard-card {
+
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    height: 100%;
+    transition: 0.3s;
+
+}
+
+
+
+.dashboard-card:hover {
+
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+
+}
+
+
+
+.dashboard-card h2 {
+
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #1faa59;
+
+}
+
+
+
+.dashboard-card p {
+
+    color: #777;
+    font-size: 16px;
+    margin-bottom: 20px;
+
+}
+
+
+
+/* Buttons */
+
+.dashboard-card button {
+
+    border-radius: 25px;
+    padding: 10px 25px;
+    font-weight: 600;
+
+}
+
+
+
+/* Responsive */
+
+@media(max-width:768px){
+
+    .customer-dashboard{
+
+        padding:20px;
+
+    }
+
+
+    .dashboard-card{
+
+        margin-bottom:20px;
+
+    }
+
+}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { loginUser } from "../services/authService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import "./Auth.css";
 
 function Login() {
 
@@ -26,40 +27,17 @@ function Login() {
 
             const response = await loginUser(loginData);
 
-            console.log("LOGIN RESPONSE:");
-            console.log(JSON.stringify(response.data, null, 2));
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem("role", response.data.role);
 
-            // Save JWT Token
-            localStorage.setItem(
-                "token",
-                response.data.token
-            );
+            if (response.data.storeId) {
+                localStorage.setItem("storeId", response.data.storeId);
+            }
 
-            // Save User Id
-            localStorage.setItem(
-                "userId",
-                response.data.userId
-            );
-
-            // Save Role
-            localStorage.setItem(
-                "role",
-                response.data.role
-            );
-// Save Store ID
-if (response.data.storeId) {
-    localStorage.setItem(
-        "storeId",
-        response.data.storeId
-    );
-}
-            // Save Delivery Partner ID
-if (response.data.deliveryPartnerId) {
-    localStorage.setItem(
-        "deliveryPartnerId",
-        response.data.deliveryPartnerId
-    );
-}
+            if (response.data.deliveryPartnerId) {
+                localStorage.setItem("deliveryPartnerId", response.data.deliveryPartnerId);
+            }
 
             alert("Login Successful");
 
@@ -92,40 +70,83 @@ if (response.data.deliveryPartnerId) {
 
     return (
 
-        <div className="container mt-5">
+        <div className="auth-container">
 
-            <h2>User Login</h2>
+            <div className="auth-left">
+                <div className="auth-left-content">
 
-            <form onSubmit={handleSubmit}>
+                    <div className="auth-logo">🧺 LocalBasket</div>
 
-                <input
-                    type="email"
-                    className="form-control mb-3"
-                    placeholder="Email"
-                    name="email"
-                    value={loginData.email}
-                    onChange={handleChange}
-                    required
-                />
+                    <h2>Fresh groceries, delivered from stores near you.</h2>
+                    <p>Login to track orders, manage your cart, and shop from your favorite local stores.</p>
 
-                <input
-                    type="password"
-                    className="form-control mb-3"
-                    placeholder="Password"
-                    name="password"
-                    value={loginData.password}
-                    onChange={handleChange}
-                    required
-                />
+                    <div className="auth-feature">
+                        <div className="auth-feature-icon">🏪</div>
+                        <span>Shop from trusted local stores</span>
+                    </div>
 
-                <button
-                    type="submit"
-                    className="btn btn-success"
-                >
-                    Login
-                </button>
+                    <div className="auth-feature">
+                        <div className="auth-feature-icon">⚡</div>
+                        <span>Fast, reliable delivery</span>
+                    </div>
 
-            </form>
+                    <div className="auth-feature">
+                        <div className="auth-feature-icon">🔒</div>
+                        <span>Secure account & payments</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div className="auth-right">
+                <div className="auth-form-box">
+
+                    <h3 className="fw-bold mb-1">Welcome Back</h3>
+                    <p className="text-muted mb-4">Login to your account</p>
+
+                    <form onSubmit={handleSubmit}>
+
+                        <div className="mb-3">
+                            <label className="form-label small fw-semibold">Email</label>
+                            <input
+                                type="email"
+                                className="form-control"
+                                placeholder="you@example.com"
+                                name="email"
+                                value={loginData.email}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label className="form-label small fw-semibold">Password</label>
+                            <input
+                                type="password"
+                                className="form-control"
+                                placeholder="••••••••"
+                                name="password"
+                                value={loginData.password}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+
+                        <button type="submit" className="btn btn-success w-100 py-2 fw-semibold">
+                            Login
+                        </button>
+
+                    </form>
+
+                    <p className="text-center text-muted small mt-4 mb-0">
+                        Don't have an account?{" "}
+                        <Link to="/register" className="text-success fw-semibold text-decoration-none">
+                            Register
+                        </Link>
+                    </p>
+
+                </div>
+            </div>
 
         </div>
 
