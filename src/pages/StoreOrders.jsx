@@ -1,26 +1,35 @@
 import { useEffect, useState } from "react";
-import { 
+import "./StoreOrders.css";
+
+import {
     getOrdersByStore,
     updateOrderStatus
 } from "../services/orderService";
 
+import {
+    FaShoppingBag,
+    FaSearch,
+    FaUser,
+    FaRupeeSign,
+    FaCalendarAlt,
+    FaBoxOpen,
+    FaCheckCircle,
+    FaTruck,
+    FaClipboardCheck
+} from "react-icons/fa";
 
 function StoreOrders() {
 
-
     const [orders, setOrders] = useState([]);
+    const [search, setSearch] = useState("");
 
     const storeId = localStorage.getItem("storeId");
-
-
 
     useEffect(() => {
 
         loadOrders();
 
     }, []);
-
-
 
     const loadOrders = async () => {
 
@@ -31,7 +40,7 @@ function StoreOrders() {
             setOrders(response.data);
 
         }
-        catch(error){
+        catch (error) {
 
             console.log(error);
 
@@ -39,10 +48,7 @@ function StoreOrders() {
 
     };
 
-
-
     const changeStatus = async (id, status) => {
-
 
         try {
 
@@ -51,7 +57,7 @@ function StoreOrders() {
             loadOrders();
 
         }
-        catch(error){
+        catch (error) {
 
             console.log(error);
 
@@ -59,200 +65,340 @@ function StoreOrders() {
 
     };
 
+    const filteredOrders = orders.filter(order =>
 
+        order.id.toString().includes(search) ||
+
+        order.user.firstName
+            .toLowerCase()
+            .includes(search.toLowerCase()) ||
+
+        order.user.lastName
+            .toLowerCase()
+            .includes(search.toLowerCase())
+
+    );
 
     return (
 
-        <div className="container mt-5">
+        <div className="orders-page">
 
+            {/* Header */}
 
-            <h2 className="mb-4">
-                Store Orders
-            </h2>
+            <div className="orders-header">
 
+                <div>
 
+                    <h2>Store Orders</h2>
 
-            {
-                orders.map((order)=>(
+                    <p>
+                        Manage customer orders efficiently.
+                    </p>
 
+                </div>
 
-                    <div 
-                    className="card shadow p-4 mb-3"
-                    key={order.id}
-                    >
+            </div>
 
+            {/* Search */}
 
-                        <h5>
-                            Order ID : {order.id}
-                        </h5>
+            <div className="orders-search">
 
+                <FaSearch className="search-icon"/>
 
+                <input
 
-                        <p>
-                            Customer :
-                            {" "}
-                            {order.user.firstName}
-                            {" "}
-                            {order.user.lastName}
-                        </p>
+                    type="text"
 
+                    placeholder="Search Order ID or Customer..."
 
+                    value={search}
 
-                        <p>
-                            Amount :
-                            ₹ {order.totalAmount}
-                        </p>
+                    onChange={(e)=>setSearch(e.target.value)}
 
+                />
 
+            </div>
 
-                        <p>
-                            Status :
-                            <b>
-                                {" "}
-                                {order.status}
-                            </b>
-                        </p>
+            {/* Summary */}
 
+            <div className="orders-summary">
 
+                <div className="summary-card">
 
-                        <p>
-                            Date :
-                            {order.orderDate}
-                        </p>
+                    <h3>{orders.length}</h3>
 
+                    <span>Total Orders</span>
 
+                </div>
 
-                        <hr />
+                <div className="summary-card">
 
-
-
-                        <h6>
-                            Products
-                        </h6>
-
-
+                    <h3>
 
                         {
-                            order.orderItems.map((item)=>(
 
-                                <div key={item.id}>
+                            orders.filter(o=>o.status==="PLACED").length
 
-
-                                    <p>
-
-                                    {item.storeProduct.product.productName}
-
-                                    {" - "}
-
-                                    Quantity:
-                                    {" "}
-                                    {item.quantity}
-
-                                    </p>
-
-
-                                </div>
-
-
-                            ))
                         }
 
+                    </h3>
 
+                    <span>Placed</span>
+
+                </div>
+
+                <div className="summary-card">
+
+                    <h3>
+
+                        {
+
+                            orders.filter(o=>o.status==="PACKED").length
+
+                        }
+
+                    </h3>
+
+                    <span>Packed</span>
+
+                </div>
+
+                <div className="summary-card">
+
+                    <h3>
+
+                        {
+
+                            orders.filter(o=>o.status==="DELIVERED").length
+
+                        }
+
+                    </h3>
+
+                    <span>Delivered</span>
+
+                </div>
+
+            </div>
+
+            {/* Orders */}
+
+            <div className="orders-grid">
+
+            {
+
+                filteredOrders.length===0 ?
+
+                (
+
+                    <h4>No Orders Found</h4>
+
+                )
+
+                :
+
+                filteredOrders.map((order)=>(
+
+                <div
+
+                    className="order-card"
+
+                    key={order.id}
+
+                >
+
+                    <div className="order-top">
 
                         <div>
 
+                            <h3>
 
+                                <FaShoppingBag />
 
-                        {
-                            order.status === "PLACED" &&
+                                {" "}Order #{order.id}
 
-                            <button
-                            className="btn btn-primary me-2"
-                            onClick={() =>
-                                changeStatus(
-                                    order.id,
-                                    "CONFIRMED"
-                                )
-                            }
-                            >
-                                Confirm Order
-                            </button>
-
-                        }
-
-
-
-                        {
-                            order.status === "CONFIRMED" &&
-
-                            <button
-                            className="btn btn-warning me-2"
-                            onClick={() =>
-                                changeStatus(
-                                    order.id,
-                                    "PACKED"
-                                )
-                            }
-                            >
-                                Pack Order
-                            </button>
-
-                        }
-
-
-
-                        {
-                            order.status === "PACKED" &&
-
-                            <button
-                            className="btn btn-success"
-                            onClick={() =>
-                                changeStatus(
-                                    order.id,
-                                    "OUT_FOR_DELIVERY"
-                                )
-                            }
-                            >
-                                Send Delivery
-                            </button>
-
-                        }
-                        {
-    order.status === "OUT_FOR_DELIVERY" &&
-
-    <button
-        className="btn btn-dark"
-        onClick={() =>
-            changeStatus(
-                order.id,
-                "DELIVERED"
-            )
-        }
-    >
-        Mark Delivered
-    </button>
-
-}
-
-
+                            </h3>
 
                         </div>
 
+                        <span className={`status ${order.status.toLowerCase()}`}>
 
+                            {order.status}
+
+                        </span>
 
                     </div>
 
+                    <div className="order-info">
+
+                        <p>
+
+                            <FaUser />
+
+                            Customer :
+
+                            {order.user.firstName}
+
+                            {" "}
+
+                            {order.user.lastName}
+
+                        </p>
+
+                        <p>
+
+                            <FaRupeeSign />
+
+                            Amount :
+
+                            ₹ {order.totalAmount}
+
+                        </p>
+
+                        <p>
+
+                            <FaCalendarAlt />
+
+                            {order.orderDate}
+
+                        </p>
+
+                    </div>
+
+                    <div className="products-list">
+
+                        <h4>
+
+                            <FaBoxOpen />
+
+                            Products
+
+                        </h4>
+                                                {
+
+                            order.orderItems.map((item)=>(
+
+                                <div
+                                    className="product-item"
+                                    key={item.id}
+                                >
+
+                                    <span>
+
+                                        {item.storeProduct.product.productName}
+
+                                    </span>
+
+                                    <strong>
+
+                                        Qty : {item.quantity}
+
+                                    </strong>
+
+                                </div>
+
+                            ))
+
+                        }
+
+                    </div>
+
+                    <div className="action-buttons">
+
+                        {
+
+                            order.status==="PLACED" &&
+
+                            <button
+
+                                className="confirm-btn"
+
+                                onClick={()=>changeStatus(order.id,"CONFIRMED")}
+
+                            >
+
+                                <FaClipboardCheck />
+
+                                Confirm
+
+                            </button>
+
+                        }
+
+                        {
+
+                            order.status==="CONFIRMED" &&
+
+                            <button
+
+                                className="pack-btn"
+
+                                onClick={()=>changeStatus(order.id,"PACKED")}
+
+                            >
+
+                                <FaBoxOpen />
+
+                                Pack Order
+
+                            </button>
+
+                        }
+
+                        {
+
+                            order.status==="PACKED" &&
+
+                            <button
+
+                                className="delivery-btn"
+
+                                onClick={()=>changeStatus(order.id,"OUT_FOR_DELIVERY")}
+
+                            >
+
+                                <FaTruck />
+
+                                Send Delivery
+
+                            </button>
+
+                        }
+
+                        {
+
+                            order.status==="OUT_FOR_DELIVERY" &&
+
+                            <button
+
+                                className="deliver-btn"
+
+                                onClick={()=>changeStatus(order.id,"DELIVERED")}
+
+                            >
+
+                                <FaCheckCircle />
+
+                                Mark Delivered
+
+                            </button>
+
+                        }
+
+                    </div>
+
+                </div>
 
                 ))
+
             }
 
-
+            </div>
 
         </div>
 
     );
 
 }
-
 
 export default StoreOrders;

@@ -1,0 +1,285 @@
+.owner-dashboard{
+    min-height:100vh;
+    background:#f5f7fb;
+    padding:30px;
+}
+
+.dashboard-loading{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:80vh;
+    font-size:24px;
+    font-weight:600;
+    color:#2e7d32;
+}
+
+/* Header */
+
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.dashboard-header h2{
+    font-size:32px;
+    color:#1f2937;
+    margin-bottom:8px;
+}
+
+.dashboard-header p{
+    color:#6b7280;
+    margin:0;
+}
+
+.dashboard-actions{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.action-btn{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 20px;
+    border-radius:12px;
+    color:#fff;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+}
+
+.action-btn:hover{
+    transform:translateY(-3px);
+    color:#fff;
+}
+
+.green{
+    background:#2e7d32;
+}
+
+.orange{
+    background:#fb8c00;
+}
+
+.blue{
+    background:#1976d2;
+}
+
+/* KPI Cards */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-bottom:35px;
+}
+
+.stat-card{
+    background:#fff;
+    border-radius:18px;
+    padding:25px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.stat-card:hover{
+    transform:translateY(-5px);
+}
+
+.stat-card h4{
+    font-size:28px;
+    margin:15px 0 8px;
+    color:#1f2937;
+}
+
+.stat-card p{
+    margin:0;
+    color:#666;
+}
+
+.stat-icon{
+    font-size:42px;
+}
+
+.stat-icon.green{
+    color:#2e7d32;
+}
+
+.stat-icon.blue{
+    color:#1976d2;
+}
+
+.stat-icon.orange{
+    color:#fb8c00;
+}
+
+.stat-icon.red{
+    color:#e53935;
+}
+
+.stat-icon.purple{
+    color:#7b1fa2;
+}
+
+.stat-icon.yellow{
+    color:#fbc02d;
+}
+
+.revenue-card{
+    background:linear-gradient(135deg,#2e7d32,#43a047);
+    color:#fff;
+}
+
+.revenue-card h4,
+.revenue-card p{
+    color:#fff;
+}
+
+.stat-icon.white{
+    color:#fff;
+}
+
+/* Bottom Grid */
+
+.bottom-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+    margin-top:30px;
+}
+/* ===========================
+   Card Hover Effects
+=========================== */
+
+.summary-card:hover,
+.performance-card:hover,
+.activity-card:hover{
+    transform:translateY(-4px);
+    transition:.3s ease;
+    box-shadow:0 12px 28px rgba(0,0,0,.12);
+}
+
+.stat-card,
+.summary-card,
+.performance-card,
+.activity-card,
+.quick-card{
+    transition:all .3s ease;
+}
+
+/* ===========================
+   Scrollbar
+=========================== */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#cfcfcf;
+    border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:#9e9e9e;
+}
+
+/* ===========================
+   Business Summary
+=========================== */
+
+.summary-row strong{
+    color:#2e7d32;
+    font-weight:700;
+}
+
+.summary-row span{
+    color:#666;
+}
+
+/* ===========================
+   Performance Cards
+=========================== */
+
+.performance-grid div:hover{
+    background:#edf7ed;
+    transform:scale(1.03);
+    transition:.3s;
+}
+
+/* ===========================
+   Activity
+=========================== */
+
+.activity-card li{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:15px;
+}
+
+.activity-card li:hover{
+    color:#2e7d32;
+}
+
+/* ===========================
+   Quick Action
+=========================== */
+
+.quick-section{
+    display:flex;
+    flex-direction:column;
+}
+
+.quick-section h3{
+    margin-bottom:20px;
+}
+
+.quick-card span{
+    font-size:15px;
+    font-weight:600;
+}
+
+/* ===========================
+   Mobile
+=========================== */
+
+@media(max-width:768px){
+
+.dashboard-header h2{
+    font-size:28px;
+}
+
+.stats-grid{
+    grid-template-columns:1fr;
+}
+
+.bottom-grid{
+    grid-template-columns:1fr;
+}
+
+.performance-grid{
+    grid-template-columns:1fr;
+}
+
+.quick-grid{
+    display:flex;
+    flex-direction:column;
+}
+
+.action-btn{
+    width:100%;
+}
+
+.quick-card{
+    justify-content:flex-start;
+}
+
+}

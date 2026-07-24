@@ -1,14 +1,22 @@
 import { useState } from "react";
-import { addStoreProduct } from "../services/storeProductService";
+
+import {
+    addStoreProduct
+} from "../services/storeProductService";
+
+import "./AddStoreProduct.css";
 
 
 function AddStoreProduct() {
 
 
+    const storeId = localStorage.getItem("storeId");
+
+
     const [product, setProduct] = useState({
 
-        storeId: "",
-        productId: "",
+        productName: "",
+        category: "",
         sellingPrice: "",
         stockQuantity: "",
         discountPercentage: "",
@@ -20,11 +28,14 @@ function AddStoreProduct() {
 
     const handleChange = (e) => {
 
+        const { name, value } = e.target;
+
+
         setProduct({
 
             ...product,
 
-            [e.target.name]: e.target.value
+            [name]: value
 
         });
 
@@ -32,7 +43,42 @@ function AddStoreProduct() {
 
 
 
+
     const saveProduct = async () => {
+
+
+        if (!product.productName.trim()) {
+
+            alert("Please enter product name");
+            return;
+
+        }
+
+
+        if (!product.category.trim()) {
+
+            alert("Please enter category");
+            return;
+
+        }
+
+
+        if (!product.sellingPrice || Number(product.sellingPrice) <= 0) {
+
+            alert("Enter a valid price");
+            return;
+
+        }
+
+
+        if (!product.stockQuantity || Number(product.stockQuantity) < 0) {
+
+            alert("Enter valid stock quantity");
+            return;
+
+        }
+
+
 
 
         try {
@@ -41,40 +87,26 @@ function AddStoreProduct() {
             const data = {
 
 
-                store: {
-
-                    id: Number(product.storeId)
-
-                },
+                storeId: Number(storeId),
 
 
-                product: {
-
-                    id: Number(product.productId)
-
-                },
+                productName: product.productName,
 
 
-                sellingPrice: Number(product.sellingPrice),
+                category: product.category,
 
 
-                stockQuantity: Number(product.stockQuantity),
+                price: Number(product.sellingPrice),
 
 
-                discountPercentage: Number(product.discountPercentage),
-
-
-                isAvailable: product.isAvailable
+                stock: Number(product.stockQuantity)
 
 
             };
 
 
 
-            console.log(
-    "Sending Data:",
-    JSON.stringify(data, null, 2)
-);
+            console.log("Sending Data:", data);
 
 
 
@@ -82,14 +114,14 @@ function AddStoreProduct() {
 
 
 
-            alert("Product added successfully");
+            alert("Product Added Successfully");
 
 
 
             setProduct({
 
-                storeId: "",
-                productId: "",
+                productName: "",
+                category: "",
                 sellingPrice: "",
                 stockQuantity: "",
                 discountPercentage: "",
@@ -99,15 +131,26 @@ function AddStoreProduct() {
 
 
         }
+
+
         catch(error) {
 
 
-            console.log(error);
+            console.log("ERROR:", error);
+
+
+            console.log(
+                "BACKEND RESPONSE:",
+                error.response?.data
+            );
 
 
             alert(
-                error.response?.data?.message ||
+
+                error.response?.data ||
+
                 "Failed to add product"
+
             );
 
 
@@ -118,114 +161,222 @@ function AddStoreProduct() {
 
 
 
+
+
     return (
 
-        <div className="container mt-5">
+
+        <div className="add-product-page">
 
 
-            <h2>
-                Add Store Product
-            </h2>
-
-
-
-            <input
-
-                className="form-control mb-3"
-
-                name="storeId"
-
-                placeholder="Store ID"
-
-                value={product.storeId}
-
-                onChange={handleChange}
-
-            />
+            <div className="add-product-card">
 
 
 
-            <input
-
-                className="form-control mb-3"
-
-                name="productId"
-
-                placeholder="Product ID"
-
-                value={product.productId}
-
-                onChange={handleChange}
-
-            />
+                <h2>
+                    Add Store Product
+                </h2>
 
 
 
-            <input
-
-                className="form-control mb-3"
-
-                name="sellingPrice"
-
-                placeholder="Selling Price"
-
-                value={product.sellingPrice}
-
-                onChange={handleChange}
-
-            />
+                <p>
+                    Add a new product to your store inventory.
+                </p>
 
 
 
-            <input
 
-                className="form-control mb-3"
 
-                name="stockQuantity"
+                <div className="form-group">
 
-                placeholder="Stock Quantity"
 
-                value={product.stockQuantity}
-
-                onChange={handleChange}
-
-            />
+                    <label>
+                        Product
+                    </label>
 
 
 
-            <input
+                    <input
 
-                className="form-control mb-3"
+                        type="text"
 
-                name="discountPercentage"
+                        className="form-control"
 
-                placeholder="Discount %"
+                        name="productName"
 
-                value={product.discountPercentage}
+                        value={product.productName}
 
-                onChange={handleChange}
+                        onChange={handleChange}
 
-            />
+                        placeholder="Enter product name"
+
+                    />
+
+
+                </div>
 
 
 
-            <button
 
-                className="btn btn-primary"
 
-                onClick={saveProduct}
 
-            >
+                <div className="form-group">
 
-                Add Product
 
-            </button>
+                    <label>
+                        Category
+                    </label>
 
+
+
+                    <input
+
+                        type="text"
+
+                        className="form-control"
+
+                        name="category"
+
+                        value={product.category}
+
+                        onChange={handleChange}
+
+                        placeholder="Enter category"
+
+                    />
+
+
+                </div>
+
+
+
+
+
+
+                <div className="form-group">
+
+
+                    <label>
+                        Selling Price
+                    </label>
+
+
+
+                    <input
+
+                        type="number"
+
+                        className="form-control"
+
+                        name="sellingPrice"
+
+                        value={product.sellingPrice}
+
+                        onChange={handleChange}
+
+                        placeholder="Enter selling price"
+
+                    />
+
+
+                </div>
+
+
+
+
+
+
+                <div className="form-group">
+
+
+                    <label>
+                        Stock Quantity
+                    </label>
+
+
+
+                    <input
+
+                        type="number"
+
+                        className="form-control"
+
+                        name="stockQuantity"
+
+                        value={product.stockQuantity}
+
+                        onChange={handleChange}
+
+                        placeholder="Enter stock quantity"
+
+                    />
+
+
+                </div>
+
+
+
+
+
+
+                <div className="form-group">
+
+
+                    <label>
+                        Discount (%)
+                    </label>
+
+
+
+                    <input
+
+                        type="number"
+
+                        className="form-control"
+
+                        name="discountPercentage"
+
+                        value={product.discountPercentage}
+
+                        onChange={handleChange}
+
+                        placeholder="Enter discount"
+
+                    />
+
+
+                </div>
+
+
+
+
+
+
+
+                <button
+
+                    className="save-btn"
+
+                    onClick={saveProduct}
+
+                >
+
+                    Add Product
+
+                </button>
+
+
+
+
+
+            </div>
 
 
         </div>
 
+
     );
+
 
 }
 

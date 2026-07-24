@@ -1,25 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import {
+    FiSearch,
+    FiShoppingCart,
+    FiPackage,
+    FiFilter
+} from "react-icons/fi";
+
 import { addToCart } from "../services/cartService";
 import { getProductsByStore } from "../services/productService";
-
+import "../styles/products.css";
 
 function Products() {
 
-
     const [products, setProducts] = useState([]);
+    const [search, setSearch] = useState("");
 
-
-    const storeId = 2;   // change later if user selects store
-
-
+    // TODO: Replace with selected store later
+    const storeId = 2;
 
     useEffect(() => {
-
         loadProducts();
-
     }, []);
-
-
 
     const loadProducts = async () => {
 
@@ -27,12 +28,9 @@ function Products() {
 
             const response = await getProductsByStore(storeId);
 
-            console.log("Store Products:", response.data);
-
             setProducts(response.data);
 
-
-        } catch(error) {
+        } catch (error) {
 
             console.log(error);
 
@@ -40,16 +38,27 @@ function Products() {
 
     };
 
+    const filteredProducts = useMemo(() => {
 
+        return products.filter((item) => {
 
+            const name = item.product?.productName?.toLowerCase() || "";
+            const brand = item.product?.brand?.toLowerCase() || "";
+
+            return (
+                name.includes(search.toLowerCase()) ||
+                brand.includes(search.toLowerCase())
+            );
+
+        });
+
+    }, [products, search]);
 
     const handleAddToCart = async (storeProductId) => {
 
-
         const userId = localStorage.getItem("userId");
 
-
-        if(!userId){
+        if (!userId) {
 
             alert("Please login first");
 
@@ -57,116 +66,212 @@ function Products() {
 
         }
 
-
         try {
 
-
-            await addToCart(
-                userId,
-                storeProductId,
-                1
-            );
-
+            await addToCart(userId, storeProductId, 1);
 
             alert("Product added to cart");
 
-
-        } catch(error) {
-
+        } catch (error) {
 
             console.log(error);
 
             alert("Failed to add cart");
 
-
         }
-
 
     };
 
-
-
-
     return (
 
-        <div className="container mt-4">
+        <div className="products-page">
 
+            <div className="container">
 
-            <h2>
-                Products
-            </h2>
+                {/* Hero */}
 
+                <div className="products-hero">
 
+                    <div>
 
-            {
-                products.map((item)=>(
+                        <span className="hero-tag">
+                            🌿 Fresh Grocery Collection
+                        </span>
 
+                        <h1>
+                            Shop Fresh Products
+                        </h1>
 
-                    <div
-                        className="card mb-3"
-                        key={item.id}
-                    >
-
-                        <div className="card-body">
-
-
-                            <h5>
-                                {item.product?.productName}
-                            </h5>
-
-
-                            <p>
-                                Brand: {item.product?.brand}
-                            </p>
-
-
-                            <p>
-                                Description: {item.product?.description}
-                            </p>
-
-
-                            <p>
-                                Unit: {item.product?.unit}
-                            </p>
-
-
-                            <p>
-                                Price: ₹{item.sellingPrice}
-                            </p>
-
-
-                            <p>
-                                Stock: {item.stockQuantity}
-                            </p>
-
-
-
-                            <button
-                                className="btn btn-success"
-                                onClick={() => handleAddToCart(item.id)}
-                            >
-
-                                Add to Cart
-
-                            </button>
-
-
-
-                        </div>
-
+                        <p>
+                            Fresh vegetables, fruits, groceries and daily essentials from trusted local stores.
+                        </p>
 
                     </div>
 
+                    <div className="hero-count">
 
-                ))
-            }
+                        <FiPackage />
 
+                        <div>
+
+                            <h3>{filteredProducts.length}</h3>
+
+                            <span>Products Available</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {/* Search */}
+
+                <div className="search-section">
+
+                    <div className="search-box">
+
+                        <FiSearch />
+
+                        <input
+                            type="text"
+                            placeholder="Search products or brands..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+
+                    </div>
+
+                    <button className="filter-btn">
+
+                        <FiFilter />
+
+                        Filter
+
+                    </button>
+
+                </div>
+
+                {/* Products */}
+
+                <div className="row g-4">
+
+                    {filteredProducts.length === 0 ? (
+
+                        <div className="col-12">
+
+                            <div className="empty-products">
+
+                                <h3>No Products Found</h3>
+
+                            </div>
+
+                        </div>
+
+                    ) : (
+
+                        filteredProducts.map((item) => (
+
+                            <div
+                                className="col-xl-3 col-lg-4 col-md-6"
+                                key={item.id}
+                            >
+
+                                <div className="product-card">
+
+                                    <div className="product-image">
+
+                                        🛒
+
+                                    </div>
+
+                                    <div className="product-body">
+
+                                        <span className="brand">
+
+                                            {item.product?.brand}
+
+                                        </span>
+
+                                        <h4>
+
+                                            {item.product?.productName}
+
+                                        </h4>
+
+                                        <p>
+
+                                            {item.product?.description}
+
+                                        </p>
+
+                                        <div className="product-meta">
+
+                                            <span className="price">
+
+                                                ₹{item.sellingPrice}
+
+                                            </span>
+
+                                            <span className="unit">
+
+                                                {item.product?.unit}
+
+                                            </span>
+
+                                        </div>
+
+                                        <div className="stock-row">
+
+                                            {item.stockQuantity > 0 ? (
+
+                                                <span className="stock in-stock">
+
+                                                    In Stock ({item.stockQuantity})
+
+                                                </span>
+
+                                            ) : (
+
+                                                <span className="stock out-stock">
+
+                                                    Out of Stock
+
+                                                </span>
+
+                                            )}
+
+                                        </div>
+
+                                        <button
+                                            className="btn btn-success w-100 mt-3"
+                                            disabled={item.stockQuantity <= 0}
+                                            onClick={() => handleAddToCart(item.id)}
+                                        >
+
+                                            <FiShoppingCart />
+
+                                            Add To Cart
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        ))
+
+                    )}
+
+                </div>
+
+            </div>
 
         </div>
 
     );
 
 }
-
 
 export default Products;

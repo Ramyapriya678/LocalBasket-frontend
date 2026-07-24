@@ -30,7 +30,7 @@ import ManageProducts from "./pages/ManageProducts";
 import ManageOrders from "./pages/ManageOrders";
 
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import Orders from "./pages/Orders";
 import StoreOwnerDashboard from "./pages/StoreOwnerDashboard";
 import MyStoreProducts from "./pages/MyStoreProducts";
 import AddStoreProduct from "./pages/AddStoreProduct";
@@ -118,11 +118,10 @@ function App() {
                 />
 
 
-                <Route
-                    path="/orders"
-                    element={<MyOrders />}
-                />
-
+         <Route
+    path="/orders"
+    element={<Orders />}
+/>
 
                 <Route
                     path="/orders/:id"

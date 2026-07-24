@@ -1,106 +1,108 @@
-.customer-dashboard {
-
-    padding: 40px;
-    background: #f6faf7;
-    min-height: 100vh;
-
+.customer-dashboard{
+    background:#f8fafc;
+    min-height:100vh;
+    padding:40px;
 }
 
-
-
-.customer-dashboard h1 {
-
-    color: #1faa59;
-    font-weight: 700;
-    text-align: center;
-
+.dashboard-hero{
+    background:linear-gradient(135deg,#16a34a,#22c55e);
+    color:#fff;
+    border-radius:24px;
+    padding:45px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:35px;
 }
 
-
-
-/* Card Layout */
-
-.row {
-
-    display: flex;
-    flex-wrap: wrap;
-
+.dashboard-badge{
+    background:rgba(255,255,255,.18);
+    padding:8px 18px;
+    border-radius:50px;
+    display:inline-block;
+    margin-bottom:15px;
 }
 
-
-
-/* Dashboard Cards */
-
-.dashboard-card {
-
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    height: 100%;
-    transition: 0.3s;
-
+.dashboard-hero h1{
+    font-weight:800;
+    margin-bottom:10px;
 }
 
-
-
-.dashboard-card:hover {
-
-    transform: translateY(-8px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-
+.dashboard-hero p{
+    opacity:.9;
 }
 
-
-
-.dashboard-card h2 {
-
-    font-size: 28px;
-    margin-bottom: 15px;
-    color: #1faa59;
-
+.stats-card{
+    background:#fff;
+    border-radius:22px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+    transition:.3s;
 }
 
-
-
-.dashboard-card p {
-
-    color: #777;
-    font-size: 16px;
-    margin-bottom: 20px;
-
+.stats-card:hover{
+    transform:translateY(-8px);
 }
 
-
-
-/* Buttons */
-
-.dashboard-card button {
-
-    border-radius: 25px;
-    padding: 10px 25px;
-    font-weight: 600;
-
+.stats-icon{
+    font-size:42px;
+    color:#16a34a;
+    margin-bottom:18px;
 }
 
+.section-heading{
+    font-weight:700;
+    margin:45px 0 25px;
+}
 
+.action-card{
+    background:#fff;
+    border-radius:22px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+    transition:.3s;
+    height:100%;
+}
 
-/* Responsive */
+.action-card:hover{
+    transform:translateY(-8px);
+}
+
+.action-icon{
+    font-size:48px;
+    color:#16a34a;
+    margin-bottom:18px;
+}
+
+.action-card h4{
+    font-weight:700;
+}
+
+.action-card p{
+    color:#6b7280;
+    margin:15px 0 20px;
+}
+
+.action-card button{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    border-radius:12px;
+    padding:10px 22px;
+}
 
 @media(max-width:768px){
 
-    .customer-dashboard{
+.dashboard-hero{
+    flex-direction:column;
+    text-align:center;
+    gap:20px;
+}
 
-        padding:20px;
-
-    }
-
-
-    .dashboard-card{
-
-        margin-bottom:20px;
-
-    }
+.customer-dashboard{
+    padding:20px;
+}
 
 }

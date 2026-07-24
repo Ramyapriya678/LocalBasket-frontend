@@ -4,178 +4,436 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getOrderById } from "../services/orderService";
 import { getDeliveryByOrderId } from "../services/deliveryService";
 
+import "../styles/orderDetails.css";
+
+
 function OrderDetails() {
 
+
     const { id } = useParams();
+
     const navigate = useNavigate();
 
-    const [order, setOrder] = useState(null);
-    const [delivery, setDelivery] = useState(null);
 
-    useEffect(() => {
+    const [order,setOrder] = useState(null);
+
+    const [delivery,setDelivery] = useState(null);
+
+
+
+    useEffect(()=>{
 
         loadOrder();
+
         loadDelivery();
 
-    }, []);
+    },[]);
 
-    const loadOrder = async () => {
 
-        try {
+
+
+
+    const loadOrder = async()=>{
+
+
+        try{
+
 
             const response = await getOrderById(id);
 
-            console.log("ORDER DETAILS:", response.data);
 
             setOrder(response.data);
 
-        } catch (error) {
 
-            console.error(error);
+        }
+        catch(error){
 
-            alert("Failed to load order details");
+
+            alert("Failed to load order");
+
 
         }
 
+
     };
 
-    const loadDelivery = async () => {
 
-        try {
 
-            const response = await getDeliveryByOrderId(id);
 
-            console.log("DELIVERY DETAILS:", response.data);
+
+    const loadDelivery = async()=>{
+
+
+        try{
+
+
+            const response =
+            await getDeliveryByOrderId(id);
+
 
             setDelivery(response.data);
 
-            console.log("Delivery Status:", response.data.status);
 
-        } catch (error) {
+        }
+        catch(error){
 
-            console.log("Delivery not assigned yet");
+            console.log(
+                "Delivery not assigned"
+            );
 
         }
 
+
     };
 
-    if (!order) {
 
-        return (
 
-            <h3 className="container mt-4">
-                Loading...
-            </h3>
+
+
+    if(!order){
+
+
+        return(
+
+            <div className="order-loading">
+
+                Loading Order Details...
+
+            </div>
 
         );
 
     }
 
-    return (
 
-        <div className="container mt-4">
 
-            <h2>Order Details</h2>
 
-            <div className="card">
+return(
 
-                <div className="card-body">
 
-                    <h5>
-                        Order ID: {order.id}
-                    </h5>
 
-                    <p>
-                        <strong>Status:</strong> {order.status}
-                    </p>
+<div className="order-details-page">
 
-                    <p>
-                        <strong>Total Amount:</strong> ₹{order.totalAmount}
-                    </p>
 
-                    <p>
-                        <strong>Date:</strong>{" "}
-                        {new Date(order.orderDate).toLocaleString()}
-                    </p>
 
-                    <hr />
+<div className="details-header">
 
-                    <h4>Items</h4>
 
-                    {order.orderItems?.map((item) => (
+<h1>
+📦 Order Details
+</h1>
 
-                        <div key={item.id}>
 
-                            <p>
-                                <strong>Product:</strong>{" "}
-                                {item.storeProduct?.product?.productName}
-                            </p>
+<span className="order-id">
 
-                            <p>
-                                <strong>Quantity:</strong> {item.quantity}
-                            </p>
+Order #{order.id}
 
-                            <p>
-                                <strong>Price:</strong> ₹{item.price}
-                            </p>
+</span>
 
-                            <p>
-                                <strong>Subtotal:</strong> ₹{item.subtotal}
-                            </p>
 
-                            <hr />
+</div>
 
-                        </div>
 
-                    ))}
 
-                    <h4>Delivery Status</h4>
 
-                    {delivery ? (
 
-                        <p className="text-success fw-bold">
-                            {delivery.status}
-                        </p>
 
-                    ) : (
+<div className="details-grid">
 
-                        <p className="text-warning">
-                            Delivery Not Assigned Yet
-                        </p>
 
-                    )}
 
-                    <hr />
 
-                    <h4>Address</h4>
 
-                    <p>{order.address.street}</p>
+<div className="details-main">
 
-                    <p>{order.address.city}</p>
 
-                    <hr />
 
-                    <button
-                        className="btn btn-primary"
-                        onClick={() =>
-                            navigate("/payment", {
-                                state: {
-                                    order: order
-                                }
-                            })
-                        }
-                    >
-                        Pay Now
-                    </button>
+<div className="details-card">
 
-                </div>
 
-            </div>
+<h2>
+Order Summary
+</h2>
 
-        </div>
 
-    );
+<div className="summary-line">
+
+<span>
+Status
+</span>
+
+
+<b className="status-badge">
+
+{order.status || order.orderStatus}
+
+</b>
+
+
+</div>
+
+
+
+<div className="summary-line">
+
+<span>
+Total Amount
+</span>
+
+<strong>
+₹{order.totalAmount}
+</strong>
+
+</div>
+
+
+
+<div className="summary-line">
+
+<span>
+Order Date
+</span>
+
+
+<strong>
+
+{
+new Date(order.orderDate)
+.toLocaleString()
 
 }
+
+</strong>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div className="details-card">
+
+
+<h2>
+🛍️ Ordered Items
+</h2>
+
+
+
+{
+
+order.orderItems?.map(item=>(
+
+
+<div
+
+className="product-item"
+
+key={item.id}
+
+>
+
+
+<div>
+
+
+<h3>
+
+{
+item.storeProduct?.product?.productName ||
+"Product"
+
+}
+
+</h3>
+
+
+<p>
+Quantity : {item.quantity}
+</p>
+
+
+</div>
+
+
+
+<div>
+
+
+<p>
+₹{item.price}
+</p>
+
+
+<strong>
+₹{item.subtotal}
+</strong>
+
+
+</div>
+
+
+
+</div>
+
+
+))
+
+
+}
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div className="details-side">
+
+
+
+<div className="details-card">
+
+
+<h2>
+🚚 Delivery
+</h2>
+
+
+{
+
+delivery ?
+
+
+<div className="delivery-status">
+
+
+<div className="track-circle">
+
+✓
+
+</div>
+
+
+<p>
+
+{delivery.status}
+
+</p>
+
+
+</div>
+
+
+
+:
+
+
+<p className="pending">
+
+Delivery Not Assigned Yet
+
+</p>
+
+
+}
+
+
+
+</div>
+
+
+
+
+
+
+
+<div className="details-card">
+
+
+<h2>
+📍 Address
+</h2>
+
+
+<p>
+
+{order.address?.street}
+
+</p>
+
+
+<p>
+
+{order.address?.city}
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+
+<button
+
+className="pay-btn"
+
+onClick={()=>navigate(
+"/payment",
+{
+state:{
+order:order
+}
+}
+)}
+
+>
+
+💳 Pay Now
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+);
+
+
+}
+
 
 export default OrderDetails;

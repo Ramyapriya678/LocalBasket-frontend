@@ -1,65 +1,245 @@
 .orders-page{
 
-    background:#f6faf7;
     min-height:100vh;
-    padding:30px;
+
+    background:#f6faf7;
+
+    padding:40px;
 
 }
 
-.orders-page h2{
+
+
+.orders-page h1{
 
     color:#1faa59;
-    margin-bottom:25px;
+
+    font-size:34px;
+
+    margin-bottom:30px;
 
 }
+
+
 
 .orders-grid{
 
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:20px;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(320px,1fr));
+
+    gap:25px;
 
 }
+
+
 
 .order-card{
 
     background:white;
-    border-radius:18px;
-    padding:20px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+    padding:25px;
+
+    border-radius:22px;
+
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.08);
+
     transition:.3s;
 
 }
 
+
+
 .order-card:hover{
 
-    transform:translateY(-5px);
+    transform:translateY(-6px);
 
 }
 
-.order-card h4{
 
-    color:#1faa59;
-    margin-bottom:15px;
+
+.order-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
 
 }
 
-.order-card p{
 
-    margin:8px 0;
+
+.order-header h3{
+
+    color:#222;
 
 }
+
+
+
+.status{
+
+    padding:8px 16px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+
+
+.status.placed{
+
+    background:#fff3cd;
+
+    color:#856404;
+
+}
+
+
+
+.status.packed{
+
+    background:#cfe2ff;
+
+    color:#084298;
+
+}
+
+
+
+.status.delivered{
+
+    background:#d1e7dd;
+
+    color:#0f5132;
+
+}
+
+
+
+
+.order-info{
+
+    display:flex;
+
+    gap:20px;
+
+    margin:25px 0;
+
+}
+
+
+
+.order-info div{
+
+    flex:1;
+
+    background:#f7f7f7;
+
+    padding:15px;
+
+    border-radius:15px;
+
+}
+
+
+
+.order-info p{
+
+    color:#777;
+
+    margin:0 0 5px;
+
+}
+
+
+
+.order-info strong{
+
+    color:#333;
+
+}
+
+
+
+
+.view-order-btn{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#1faa59;
+
+    color:white;
+
+    font-weight:700;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+}
+
+
+
+.view-order-btn:hover{
+
+    background:#16884a;
+
+}
+
+
 
 .empty-orders{
 
+    background:white;
+
+    padding:50px;
+
+    border-radius:20px;
+
     text-align:center;
-    padding:60px;
-    color:#666;
 
 }
+
+
 
 .error{
 
     color:red;
+
+}
+
+
+
+
+@media(max-width:600px){
+
+
+.orders-page{
+
+padding:20px;
+
+}
+
+
+.order-info{
+
+flex-direction:column;
+
+}
+
 
 }

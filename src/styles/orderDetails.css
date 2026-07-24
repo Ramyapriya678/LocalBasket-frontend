@@ -1,0 +1,287 @@
+.order-details-page{
+
+    min-height:100vh;
+
+    background:#f6faf7;
+
+    padding:40px;
+
+}
+
+
+
+.details-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+
+
+.details-header h1{
+
+    color:#1faa59;
+
+}
+
+
+
+.order-id{
+
+    background:#e8f5e9;
+
+    color:#1faa59;
+
+    padding:10px 20px;
+
+    border-radius:20px;
+
+    font-weight:600;
+
+}
+
+
+
+
+.details-grid{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:30px;
+
+}
+
+
+
+
+.details-card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    margin-bottom:25px;
+
+
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.08);
+
+}
+
+
+
+
+.details-card h2{
+
+    color:#1faa59;
+
+    margin-bottom:20px;
+
+}
+
+
+
+
+.summary-line{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin:18px 0;
+
+}
+
+
+
+.status-badge{
+
+    background:#e8f5e9;
+
+    color:#1faa59;
+
+    padding:7px 15px;
+
+    border-radius:20px;
+
+}
+
+
+
+
+
+.product-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:15px 0;
+
+    border-bottom:1px solid #eee;
+
+}
+
+
+
+.product-item h3{
+
+    margin:0;
+
+    color:#333;
+
+}
+
+
+
+.product-item p{
+
+    color:#777;
+
+}
+
+
+
+
+
+.delivery-status{
+
+    text-align:center;
+
+}
+
+
+
+.track-circle{
+
+    width:60px;
+
+    height:60px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:#1faa59;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:30px;
+
+}
+
+
+
+
+.pending{
+
+    color:#e67e22;
+
+    font-weight:600;
+
+}
+
+
+
+
+.pay-btn{
+
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:15px;
+
+
+    background:#1faa59;
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+
+}
+
+
+
+.pay-btn:hover{
+
+    background:#16884a;
+
+}
+
+
+
+
+
+.order-loading{
+
+    height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:#1faa59;
+
+    font-size:25px;
+
+}
+
+
+
+
+@media(max-width:900px){
+
+
+.details-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
+.order-details-page{
+
+    padding:20px;
+
+}
+
+
+.details-header{
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+
+}

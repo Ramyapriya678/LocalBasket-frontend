@@ -1,11 +1,22 @@
 import { useState } from "react";
 import { registerUser } from "../services/authService";
 import { useNavigate, Link } from "react-router-dom";
+import {
+    FiUser,
+    FiMail,
+    FiPhone,
+    FiLock,
+    FiArrowRight,
+    FiEye,
+    FiEyeOff
+} from "react-icons/fi";
 import "./Auth.css";
 
 function Register() {
 
     const navigate = useNavigate();
+
+    const [showPassword, setShowPassword] = useState(false);
 
     const [user, setUser] = useState({
         firstName: "",
@@ -28,28 +39,22 @@ function Register() {
 
         try {
 
-            const response = await registerUser(user);
+            await registerUser(user);
 
-            alert("Registration Successful. Please login.");
-
-            console.log(response.data);
+            alert("Registration Successful");
 
             navigate("/login");
 
         } catch (error) {
 
-            console.error("Error:", error);
-
             if (error.response) {
-                alert(
-                    error.response.data.message ||
-                    JSON.stringify(error.response.data)
-                );
+                alert(error.response.data.message);
             } else {
                 alert("Cannot connect to backend");
             }
 
         }
+
     };
 
     return (
@@ -57,125 +62,227 @@ function Register() {
         <div className="auth-container">
 
             <div className="auth-left">
+
                 <div className="auth-left-content">
 
-                    <div className="auth-logo">🧺 LocalBasket</div>
+                    <div className="auth-logo">
+                        🧺 LocalBasket
+                    </div>
 
-                    <h2>Join thousands shopping smarter, locally.</h2>
-                    <p>Create your free account and get fresh groceries delivered from stores in your neighborhood.</p>
+                    <h2>
+                        Start Shopping
+                        <br />
+                        Smarter Today
+                    </h2>
+
+                    <p>
+                        Join thousands of happy customers buying fresh groceries
+                        from trusted stores near them.
+                    </p>
 
                     <div className="auth-feature">
                         <div className="auth-feature-icon">🏪</div>
-                        <span>Shop from trusted local stores</span>
+                        <span>50+ Trusted Local Stores</span>
                     </div>
 
                     <div className="auth-feature">
-                        <div className="auth-feature-icon">⚡</div>
-                        <span>Fast, reliable delivery</span>
+                        <div className="auth-feature-icon">🚚</div>
+                        <span>Fast Doorstep Delivery</span>
                     </div>
 
                     <div className="auth-feature">
-                        <div className="auth-feature-icon">🔒</div>
-                        <span>Secure account & payments</span>
+                        <div className="auth-feature-icon">⭐</div>
+                        <span>Thousands of Happy Customers</span>
                     </div>
 
                 </div>
+
             </div>
 
             <div className="auth-right">
+
                 <div className="auth-form-box">
 
-                    <h3 className="fw-bold mb-1">Create Account</h3>
-                    <p className="text-muted mb-4">Join LocalBasket and start shopping</p>
+                    <h3>Create Account</h3>
+
+                    <p className="text-muted mb-4">
+                        Create your free account
+                    </p>
 
                     <form onSubmit={handleSubmit}>
 
                         <div className="row">
-                            <div className="col-6 mb-3">
-                                <label className="form-label small fw-semibold">First Name</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    name="firstName"
-                                    placeholder="John"
-                                    value={user.firstName}
-                                    onChange={handleChange}
-                                    required
-                                />
+
+                            <div className="col-md-6 mb-3">
+
+                                <label className="form-label">
+                                    First Name
+                                </label>
+
+                                <div className="input-group">
+
+                                    <span className="input-group-text">
+                                        <FiUser />
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="firstName"
+                                        placeholder="John"
+                                        value={user.firstName}
+                                        onChange={handleChange}
+                                        required
+                                    />
+
+                                </div>
+
                             </div>
 
-                            <div className="col-6 mb-3">
-                                <label className="form-label small fw-semibold">Last Name</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    name="lastName"
-                                    placeholder="Doe"
-                                    value={user.lastName}
-                                    onChange={handleChange}
-                                    required
-                                />
+                            <div className="col-md-6 mb-3">
+
+                                <label className="form-label">
+                                    Last Name
+                                </label>
+
+                                <div className="input-group">
+
+                                    <span className="input-group-text">
+                                        <FiUser />
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="lastName"
+                                        placeholder="Doe"
+                                        value={user.lastName}
+                                        onChange={handleChange}
+                                        required
+                                    />
+
+                                </div>
+
                             </div>
+
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label small fw-semibold">Email</label>
-                            <input
-                                type="email"
-                                className="form-control"
-                                name="email"
-                                placeholder="you@example.com"
-                                value={user.email}
-                                onChange={handleChange}
-                                required
-                            />
+
+                            <label className="form-label">
+                                Email
+                            </label>
+
+                            <div className="input-group">
+
+                                <span className="input-group-text">
+                                    <FiMail />
+                                </span>
+
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    name="email"
+                                    placeholder="you@example.com"
+                                    value={user.email}
+                                    onChange={handleChange}
+                                    required
+                                />
+
+                            </div>
+
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label small fw-semibold">Phone Number</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="phone"
-                                placeholder="9876543210"
-                                value={user.phone}
-                                onChange={handleChange}
-                                required
-                            />
+
+                            <label className="form-label">
+                                Phone
+                            </label>
+
+                            <div className="input-group">
+
+                                <span className="input-group-text">
+                                    <FiPhone />
+                                </span>
+
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="phone"
+                                    placeholder="9876543210"
+                                    value={user.phone}
+                                    onChange={handleChange}
+                                    required
+                                />
+
+                            </div>
+
                         </div>
 
                         <div className="mb-4">
-                            <label className="form-label small fw-semibold">Password</label>
-                            <input
-                                type="password"
-                                className="form-control"
-                                name="password"
-                                placeholder="••••••••"
-                                value={user.password}
-                                onChange={handleChange}
-                                required
-                            />
+
+                            <label className="form-label">
+                                Password
+                            </label>
+
+                            <div className="input-group">
+
+                                <span className="input-group-text">
+                                    <FiLock />
+                                </span>
+
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    className="form-control"
+                                    name="password"
+                                    placeholder="Enter Password"
+                                    value={user.password}
+                                    onChange={handleChange}
+                                    required
+                                />
+
+                                <button
+                                    type="button"
+                                    className="input-group-text bg-white"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <FiEyeOff /> : <FiEye />}
+                                </button>
+
+                            </div>
+
                         </div>
 
-                        <button type="submit" className="btn btn-success w-100 py-2 fw-semibold">
-                            Register
+                        <button
+                            className="btn btn-success w-100 btn-lg d-flex align-items-center justify-content-center gap-2"
+                        >
+                            Create Account
+                            <FiArrowRight />
                         </button>
 
                     </form>
 
-                    <p className="text-center text-muted small mt-4 mb-0">
-                        Already have an account?{" "}
-                        <Link to="/login" className="text-success fw-semibold text-decoration-none">
+                    <div className="text-center mt-4">
+
+                        Already have an account?
+
+                        <Link
+                            to="/login"
+                            className="ms-2 fw-bold text-success text-decoration-none"
+                        >
                             Login
                         </Link>
-                    </p>
+
+                    </div>
 
                 </div>
+
             </div>
 
         </div>
 
     );
+
 }
 
 export default Register;
